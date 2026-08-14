@@ -1,0 +1,63 @@
+# SDD Framework Configuration
+
+# ─────────────────────────────────────────────
+# PROJECT IDENTITY
+# ─────────────────────────────────────────────
+project:
+  name: "my-conversion-project"
+  description: "Converting [Source Project Name] from [Source Lang] to [Target Lang]"
+  version: "1.0.0"
+  author: ""
+  created_at: ""
+
+# ─────────────────────────────────────────────
+# CONVERSION SETTINGS
+# ─────────────────────────────────────────────
+conversion:
+  source:
+    language: "php"              # e.g., php, python, ruby, javascript
+    framework: "laravel"         # e.g., laravel, django, rails, express
+    version: "10.x"              # Framework version
+    path: "./source"             # Path to source project
+
+  target:
+    language: "go"               # e.g., go, rust, typescript, java
+    framework: "gin"             # e.g., gin, echo, fiber, spring
+    version: "1.22"              # Language/framework version
+    path: "./output"             # Path for converted output
+
+# ─────────────────────────────────────────────
+# PROJECT SCALE
+# ─────────────────────────────────────────────
+scale:
+  size: "medium"                 # small | medium | large | enterprise
+  use_phases: true               # Enable phase-based task breakdown
+  estimated_tasks: 0             # Total estimated tasks (0 = auto)
+
+# ─────────────────────────────────────────────
+# AI / IDE SETTINGS
+# ─────────────────────────────────────────────
+ai:
+  context_file: "./context/AGENTS.md"
+  auto_update_tasks: true        # AI should update task status automatically
+  preferred_ides:                # IDEs this project is optimized for
+    - antigravity
+    - kiro
+    - cursor
+    - copilot
+
+# ─────────────────────────────────────────────
+# MAPPING RULES
+# ─────────────────────────────────────────────
+mapping:
+  patterns_file: "./.sdd/mapping/patterns.md"
+  conventions_file: "./.sdd/mapping/conventions.md"
+
+# ─────────────────────────────────────────────
+# OUTPUT SETTINGS
+# ─────────────────────────────────────────────
+output:
+  structure: "idiomatic"         # idiomatic | mirrored | custom
+  # idiomatic  = follow target language best practices
+  # mirrored   = mirror source folder structure
+  # custom     = defined manually in specs/architecture.md

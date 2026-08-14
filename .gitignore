@@ -1,0 +1,35 @@
+# .gitignore for SDD Framework
+
+# ─────────────────────────────────────────────
+# SDD Framework
+# ─────────────────────────────────────────────
+
+# Don't commit the source project if it's copied locally
+# (remove this if you want to commit it)
+# source/
+
+# ─────────────────────────────────────────────
+# Output Project (Go)
+# ─────────────────────────────────────────────
+output/.env
+output/tmp/
+output/bin/
+output/*.exe
+output/*.test
+output/vendor/
+
+# ─────────────────────────────────────────────
+# IDE / Editor
+# ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─────────────────────────────────────────────
+# OS
+# ─────────────────────────────────────────────
+.DS_Store
+desktop.ini

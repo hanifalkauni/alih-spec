@@ -1,0 +1,41 @@
+# Cursor Rules — AlihSpec Project Conversion Framework
+
+# This file is automatically read by Cursor AI.
+# It tells Cursor how to behave in this project.
+
+# ─────────────────────────────────────────────
+# PRIMARY CONTEXT
+# ─────────────────────────────────────────────
+# Always read context/AGENTS.md first before doing anything.
+# It contains the full project context, workflow, and rules.
+
+## Project Type
+This is an AlihSpec (Spec-Driven Development) project for converting code from one
+language/framework to another.
+
+## Source of Truth
+- Specs are in: specs/modules/*.md
+- Task list is in: tasks/_index.md
+- Conventions are in: context/conventions.md
+- Pattern mapping is in: .sdd/mapping/patterns.md
+- Optional target template is in: reference-target/
+
+## Critical Rules
+1. NEVER modify files in source/ or reference-target/ — both are read-only references
+2. ALWAYS write new code to output/ only
+3. ALWAYS read the relevant spec in specs/modules/ before implementing
+4. ALWAYS follow the architecture in specs/architecture.md
+5. ALWAYS follow conventions in context/conventions.md
+6. UPDATE task status in tasks/_index.md when starting or finishing a task
+
+## Workflow
+When asked to implement a feature:
+1. Read specs/modules/[module].md
+2. Read .sdd/mapping/patterns.md for concept mapping
+3. Check tasks/_index.md for the relevant task and mark it [/]
+4. Look at source/ for reference
+5. Write implementation to output/
+6. Mark task [x] in tasks/_index.md
+
+## Full Context
+Read context/AGENTS.md for complete instructions.

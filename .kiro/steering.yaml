@@ -1,0 +1,40 @@
+steering:
+  - path: context/AGENTS.md
+    description: "Primary AI agent instructions for this AlihSpec conversion project"
+  - path: specs/architecture.md
+    description: "Target project architecture — all output code must follow this"
+  - path: context/conventions.md
+    description: "Coding conventions for the target project"
+  - path: .sdd/mapping/patterns.md
+    description: "Design pattern mapping from source to target language"
+  - path: context/glossary.md
+    description: "Terminology mapping from source to target language"
+  - path: reference-target/README.md
+    description: "Optional reference target project template"
+  - path: tasks/_index.md
+    description: "Current task list and progress dashboard"
+
+rules:
+  - id: no-modify-source
+    description: "Never modify files inside the source/ or reference-target/ folder"
+    pattern: "{source/**,reference-target/**}"
+    action: warn
+    message: "⚠️ source/ and reference-target/ are read-only. Write all output to output/ instead."
+
+  - id: output-only
+    description: "All new implementation code must go into output/"
+    message: "Write implementation code to output/, not anywhere else."
+
+  - id: spec-first
+    description: "Always read the spec before implementing"
+    message: "Before implementing a module, read specs/modules/[module].md first."
+
+workflows:
+  - name: "Convert Module"
+    steps:
+      - "Read specs/modules/[module].md"
+      - "Read .sdd/mapping/patterns.md for concept mapping"
+      - "Find task in tasks/_index.md, mark [/] in progress"
+      - "Reference source/[relevant file] for logic"
+      - "Implement in output/ following specs/architecture.md"
+      - "Mark task [x] done in tasks/_index.md"
