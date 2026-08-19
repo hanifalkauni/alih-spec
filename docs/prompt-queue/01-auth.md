@@ -1,24 +1,4 @@
-# ⚡ Antrean Prompt Konversi (Generated Prompt Queue)
-
-> 📌 **Berkas ini dibuat / diperbarui secara otomatis oleh AI pada FASE 1 (Analisis Sumber).**  
-> Semua prompt di bawah ini adalah **versi lengkap berstandar enterprise** (100% guardrails utuh) di mana nama modul, file controller sumber, dan path task-nya **sudah terisi otomatis (*pre-filled*)**.  
-> **Cukup copy-paste prompt per modul di bawah ini ke AI chat secara berurutan.**
-
----
-
-## 🧭 Cara Menggunakan Berkas Ini:
-
-1. **Jalankan Fase 1** (Analisis Sumber). AI akan membedah folder `source/` dan otomatis mengisi berkas ini dengan seluruh modul riil proyek Anda.
-2. Buka berkas ini di IDE Anda.
-3. Untuk setiap modul, pilih salah satu alur kerja:
-   - **🌟 Opsi B (Single-Module Full Cycle)**: Jalankan 1 prompt lengkap untuk menyelesaikan 1 modul dari spec sampai code & QA (*Rekomendasi Vibe Coding*).
-   - **📋 Opsi A (Step-by-Step)**: Jalankan prompt per fase (Spec ➔ Checkpoint 1 ➔ Task ➔ Code ➔ Checkpoint 2) untuk kontrol presisi tinggi.
-
----
-
-<!-- CONTOH FORMAT YANG DI-GENERATE AI SAAT FASE 1 (Akan ditimpa dengan modul proyek Anda) -->
-
-## 📦 MODUL CONTOH: Auth
+# 📦 Antrean Prompt Modul 01: Auth
 
 - **Source Controller**: `source/app/Http/Controllers/AuthController.php`
 - **Source Model**: `source/app/Models/User.php`
@@ -27,7 +7,7 @@
 
 ---
 
-### 🌟 Opsi B: Full Cycle Modul Auth (1 Prompt Langsung Beres)
+## 🌟 Opsi B: Full Cycle Modul Auth (1 Prompt Langsung Beres)
 
 ```markdown
 Saya ingin mengonversi modul Auth dari `source/` ke `output/` menggunakan framework AlihSpec SDD.
@@ -67,9 +47,9 @@ Tampilkan ringkasan hasil konversi modul Auth setelah selesai.
 
 ---
 
-### 📋 Opsi A: Step-by-Step Modul Auth
+## 📋 Opsi A: Step-by-Step Modul Auth
 
-#### 1. Tulis Spec Modul Auth (Fase 2 — Deep AST Inspection)
+### 1. Tulis Spec Modul Auth (Fase 2 — Deep AST Inspection)
 ```markdown
 Tolong buatkan spesifikasi detail berstandar enterprise untuk modul Auth di `specs/modules/auth.md`.
 
@@ -96,7 +76,7 @@ Gunakan template di `specs/modules/_template.md` dan terapkan aturan DEEP CONTRO
 Tunjukkan draf spesifikasi yang telah selesai untuk saya tinjau.
 ```
 
-#### 2. Checkpoint 1: Verifikasi Spec vs Source (Fase 2B)
+### 2. Checkpoint 1: Verifikasi Spec vs Source (Fase 2B)
 ```markdown
 Tolong lakukan audit silang verifikasi (Checkpoint 1: Spec vs Source Alignment) untuk modul Auth:
 1. Bandingkan controller sumber `source/app/Http/Controllers/AuthController.php` baris-demi-baris dengan `specs/modules/auth.md`.
@@ -111,7 +91,7 @@ Tolong lakukan audit silang verifikasi (Checkpoint 1: Spec vs Source Alignment) 
 4. Berikan konfirmasi final apakah spesifikasi sudah 100% siap dibuatkan task breakdown.
 ```
 
-#### 3. Buat Task Breakdown Modul Auth (Fase 3)
+### 3. Buat Task Breakdown Modul Auth (Fase 3)
 ```markdown
 Berdasarkan spesifikasi di `specs/modules/auth.md` yang telah lolos Checkpoint 1:
 1. Buat berkas task terperinci di `tasks/phase-1-foundation/task-003-auth-module.md` menggunakan template `tasks/_template.md`.
@@ -125,7 +105,7 @@ Berdasarkan spesifikasi di `specs/modules/auth.md` yang telah lolos Checkpoint 1
 3. Daftarkan task baru tersebut ke dalam tabel antrean di `tasks/_index.md`.
 ```
 
-#### 4. Eksekusi Konversi Modul Auth (Fase 4 — Strict Zero Dummy)
+### 4. Eksekusi Konversi Modul Auth (Fase 4 — Strict Zero Dummy)
 ```markdown
 Tolong konversi modul Auth dari `source/app/Http/Controllers/AuthController.php` ke `output/` sesuai spesifikasi `specs/modules/auth.md` dan task `tasks/phase-1-foundation/task-003-auth-module.md`.
 
@@ -146,7 +126,7 @@ Instruksi Wajib Eksekusi:
 5. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
 ```
 
-#### 5. Checkpoint 2: Audit Keselarasan Kode vs Spec Modul Auth (Fase 4B)
+### 5. Checkpoint 2: Audit Keselarasan Kode vs Spec Modul Auth (Fase 4B)
 ```markdown
 Tolong lakukan audit verifikasi silang (Checkpoint 2: Code vs Spec Parity) untuk modul Auth:
 1. Periksa seluruh method repository di `output/internal/repository/`: Apakah ada data dummy hardcoded (`return 5000, nil` atau `[]map{}`) yang tersisa?
@@ -156,8 +136,3 @@ Tolong lakukan audit verifikasi silang (Checkpoint 2: Code vs Spec Parity) untuk
 5. Pastikan dokumentasi audit trail di `docs/changelog.md`, `docs/progress.md`, dan `docs/decisions.md` telah diperbarui.
 6. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
 ```
-
----
-
-> 💡 *Jalankan Fase 1 pada proyek Anda untuk men-generate prompt lengkap seperti di atas untuk setiap modul riil proyek Anda!*
-

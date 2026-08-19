@@ -32,18 +32,19 @@ Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
    - Dependensi penting pihak ketiga dari package manager (composer.json / package.json / requirements.txt)
    - Identifikasi algoritma hashing password dan struktur token JWT asli (nama key payload/claims: sub, uid, user_id, dll.)
 4. Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
-5. Buatkan berkas antrean prompt siap pakai di `docs/prompt-queue.md`:
-   - Buatkan daftar prompt siap copy-paste untuk SETIAP modul yang ditemukan.
+5. Buatkan antrean prompt siap pakai di dalam folder `docs/prompt-queue/`:
+   - Buatkan file prompt terpisah untuk SETIAP modul yang ditemukan (misal: `docs/prompt-queue/01-auth.md`, `02-user.md`, dst.).
    - Isi otomatis placeholder nama modul, path controller sumber, dan path task-nya (pre-filled).
-   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt untuk setiap modul.
+   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt di setiap file modul.
+   - Daftarkan seluruh modul ke dalam `docs/prompt-queue/README.md`.
 ```
 
 ---
 
 ### 📋 2. Tulis Spesifikasi Modul — Deep AST Inspection (Fase 2)
 
-> 💡 **TIPS VIBE CODER**: Setelah Fase 1 selesai, buka [`docs/prompt-queue.md`](../docs/prompt-queue.md)!  
-> Seluruh prompt untuk setiap modul sudah dibuatkan khusus dan pre-filled. Anda tinggal copy langsung tanpa perlu mengganti placeholder `[NAMA_MODUL]`.
+> 💡 **TIPS VIBE CODER**: Setelah Fase 1 selesai, buka folder [`docs/prompt-queue/`](../docs/prompt-queue/README.md)!  
+> Buka file modul yang ingin dikerjakan (contoh: `01-auth.md`). Seluruh prompt untuk setiap modul sudah dibuatkan khusus dan pre-filled. Anda tinggal copy langsung tanpa perlu mengganti placeholder apa pun.
 
 ```markdown
 Tolong buatkan spesifikasi detail berstandar enterprise untuk modul [NAMA_MODUL] di `specs/modules/[nama-modul].md`.

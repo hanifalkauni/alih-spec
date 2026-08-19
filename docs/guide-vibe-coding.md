@@ -71,10 +71,11 @@ Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
    - Dependensi penting pihak ketiga dari package manager (composer.json / package.json / requirements.txt)
    - Identifikasi algoritma hashing password dan struktur token JWT asli (nama key payload/claims: sub, uid, user_id, dll.)
 4. Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
-5. Buatkan berkas antrean prompt siap pakai di `docs/prompt-queue.md`:
-   - Buatkan daftar prompt siap copy-paste untuk SETIAP modul yang ditemukan.
+5. Buatkan antrean prompt siap pakai di dalam folder `docs/prompt-queue/`:
+   - Buatkan file prompt terpisah untuk SETIAP modul yang ditemukan (misal: `docs/prompt-queue/01-auth.md`, `02-user.md`, dst.).
    - Isi otomatis placeholder nama modul, path controller sumber, dan path task-nya (pre-filled).
-   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt untuk setiap modul.
+   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt di setiap file modul.
+   - Daftarkan seluruh modul ke dalam `docs/prompt-queue/README.md`.
 ```
 
 ---
@@ -82,8 +83,8 @@ Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
 ## 📋 FASE 2: Tulis Spesifikasi Modul (Deep AST Inspection)
 
 > 💡 **TIPS VIBE CODER (Zero Text Editing)**:  
-> Setelah Fase 1 selesai, **buka berkas [`docs/prompt-queue.md`](./prompt-queue.md)**!  
-> Semua prompt di bawah ini sudah di-generate otomatis dan sudah terisi lengkap dengan nama modul dan file controller Anda. Anda tinggal copy-paste langsung dari sana tanpa perlu mengganti placeholder `[NAMA_MODUL]`.
+> Setelah Fase 1 selesai, **buka folder [`docs/prompt-queue/`](./prompt-queue/README.md)**!  
+> Buka file modul yang ingin dikerjakan (contoh: `01-auth.md`). Seluruh prompt di dalamnya sudah di-generate otomatis dan sudah terisi lengkap dengan nama modul dan file controller Anda. Anda tinggal copy-paste langsung tanpa perlu mengedit placeholder apa pun.
 > 
 > *Atau, jika ingin copy manual dari panduan ini, gunakan template prompt di bawah:*
 
