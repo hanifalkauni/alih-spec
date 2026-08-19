@@ -1,128 +1,58 @@
-# QA Checklist — Validasi Hasil Konversi
+﻿# 🛡️ QA Checklist — Validasi Kualitas & Presisi Konversi
 
-> Gunakan checklist ini setelah selesai mengkonversi setiap modul.
-> Pastikan semua item terpenuhi sebelum mark task sebagai `[x] Done`.
-
----
-
-## Per-Modul Checklist
-
-Ganti `[module]` dengan nama modul yang sedang divalidasi.
-
-### ✅ 1. Spec Coverage
-
-- [ ] Semua API endpoint di `specs/modules/[module].md` sudah diimplementasi
-- [ ] Semua request/response format sudah sesuai spec
-- [ ] Semua business rules sudah diimplementasi
-- [ ] Semua acceptance criteria sudah terpenuhi
-- [ ] Semua error cases sudah dihandle (404, 401, 422, dll)
-
-### ✅ 2. Code Quality
-
-- [ ] File ada di path yang benar sesuai `specs/architecture.md`
-- [ ] Naming mengikuti `context/conventions.md`
-- [ ] Tidak ada business logic di handler layer
-- [ ] Tidak ada direct DB call di handler atau service (hanya di repository)
-- [ ] Error handling proper (no swallowed errors)
-- [ ] Context propagation benar (`ctx context.Context` sebagai arg pertama)
-- [ ] Logging menggunakan logger package (bukan fmt.Println)
-
-### ✅ 3. Interface & Dependency
-
-- [ ] Interface sudah didefinisikan di `domain/interfaces/`
-- [ ] Dependency injection via constructor (bukan global variable)
-- [ ] Handler → Service → Repository (tidak ada skip layer)
-
-### ✅ 4. Data Layer
-
-- [ ] Domain model sudah sesuai schema di `specs/data-models/schema.md`
-- [ ] Semua relasi sudah diimplementasi
-- [ ] Migration file sudah dibuat (jika ada tabel baru/modified)
-- [ ] Soft delete dihandle jika diperlukan
-
-### ✅ 5. API Contract
-
-- [ ] Request validation sudah sesuai dengan `specs/api-contracts/openapi.yaml`
-- [ ] Response structure konsisten (success/error format seragam)
-- [ ] HTTP status code sudah benar
-- [ ] Response field names sesuai konvensi
-
-### ✅ 6. Tests
-
-- [ ] Unit test untuk service layer sudah ada
-- [ ] Happy path test sudah ada
-- [ ] Error/edge case test sudah ada
-- [ ] Semua test pass
-
-### ✅ 7. Task Tracking
-
-- [ ] Task di `tasks/` sudah di-mark `[x]`
-- [ ] `tasks/_index.md` sudah diupdate
-- [ ] Progress counter di `_index.md` sudah diperbarui
+> Gunakan checklist ini setelah selesai mengonversi setiap modul.
+> Pastikan semua item terpenuhi sebelum menandai task sebagai `[x] Done`.
 
 ---
 
-## Final Release Checklist
+## 📋 Per-Modul QA Checklist
 
-Jalankan ini sebelum menyatakan seluruh konversi selesai.
+### 1. 🔍 Spec & Logic Parity (Anti-Shallow Specs)
+- [ ] **Query Parameters Parity**: Semua parameter (`?menu=...`, `?tab=...`, `?filter=...`, `?limit=...`) diproses dengan benar.
+- [ ] **Internal Branching Parity**: Seluruh percabangan logika `if/switch` di controller sumber sudah terimplementasi di service/usecase layer.
+- [ ] **Strict No Dummy Fallback**: Tidak ada method di repository maupun service yang mengembalikan data dummy/fallback hardcoded.
+- [ ] **Multi-Table Joins & Aggregations**: Semua query database, JOIN, GROUP BY, dan kalkulasi SQL riil sudah terhubung ke skema tabel.
 
-### ✅ Feature Parity
+### 2. 💎 8 Enterprise Quality Standards Verification
+- [ ] **[Q1] DateTime & Timezone Parity**: Format tanggal pada JSON output (`YYYY-MM-DD HH:mm:ss` atau RFC3339) dan timezone offset identik dengan sumber.
+- [ ] **[Q2] Currency & Numeric Precision**: Nilai saldo, koin, poin, atau harga tidak menggunakan `float64` biasa (menggunakan `int64` basis terkecil atau decimal library).
+- [ ] **[Q3] Pagination Envelope & Offset**: Amplop metadata paginasi (`current_page`, `from`, `last_page`, `per_page`, `total`) dan perhitungan offset (`(page - 1) * per_page`) identik 100%.
+- [ ] **[Q4] Validation Error Format**: Error response HTTP 422 berformat *Object of String Arrays* `{"errors": {"field": ["msg"]}}` sesuai ekspektasi frontend.
+- [ ] **[Q5] Concurrency & Row-Level Locking**: Mutasi saldo/stok yang berpotensi race condition menggunakan transaksi dan `SELECT ... FOR UPDATE`.
+- [ ] **[Q6] Soft Delete in Manual Joins**: Semua manual JOIN dan raw query menyertakan filter `AND [table].deleted_at IS NULL`.
+- [ ] **[Q7] JWT Claims Key Parity**: Key nama klaim JWT (`sub`, `uid`, `user_id`, `roles`) diekstrak dengan key yang sama persis dari token sumber.
+- [ ] **[Q8] Empty State Contract**: Data koleksi list kosong mengembalikan array kosong `[]` (bukan `null`).
 
-- [ ] Semua endpoint dari source project sudah ada di output
-- [ ] Semua business rules sudah terimplementasi
-- [ ] Tidak ada fitur yang hilang (bukan sengaja di-drop)
-- [ ] Fitur yang di-drop sudah didokumentasikan di `specs/overview.md` (Out of Scope)
+### 3. 🎯 Pointer Nullability Parity
+- [ ] Field DTO yang opsional atau nullable di database menggunakan tipe **pointer** (`*int64`, `*string`, `*bool`) sehingga tidak memicu false zero-value (`0` atau `""`) di JSON.
 
-### ✅ Cross-Cutting Concerns
+### 4. 🏛️ Code Architecture & Conventions
+- [ ] File berada di path yang benar sesuai `specs/architecture.md`.
+- [ ] Naming convention mengikuti `context/conventions.md`.
+- [ ] Tidak ada business logic di handler layer (hanya di service/usecase).
+- [ ] Tidak ada akses DB langsung di handler (hanya melalui repository interface).
+- [ ] Error handling proper (tidak ada error yang diabaikan/swallowed).
+- [ ] Context propagation benar (`ctx context.Context` sebagai argumen pertama).
 
-- [ ] Authentication sudah bekerja end-to-end
-- [ ] Authorization/permission sudah bekerja
-- [ ] Request validation sudah konsisten di semua endpoint
-- [ ] Error response format sudah konsisten
-- [ ] Logging sudah ada di semua layer yang diperlukan
-- [ ] Environment variables sudah didokumentasikan di `.env.example`
+### 5. 🧪 Testing & Acceptance Criteria
+- [ ] Unit tests dan integration tests mencakup:
+  - Skenario Base Mode
+  - Skenario Query Parameter Mode (`?menu=...`)
+  - Skenario Null Safety (record relasi kosong)
+  - Skenario Validation Error (HTTP 400/422)
+- [ ] Seluruh test pass 100% (0 failure).
 
-### ✅ Database
-
-- [ ] Semua tabel sudah di-migrate
-- [ ] Semua relasi berfungsi
-- [ ] Index database sudah ada (terutama untuk foreign keys)
-- [ ] Seed data sudah ada (jika diperlukan)
-
-### ✅ Integration Tests
-
-- [ ] Semua endpoint sudah punya minimal 1 integration test
-- [ ] Test berjalan dengan database test terpisah
-- [ ] Semua test pass (0 failures)
-
-### ✅ Documentation
-
-- [ ] `docs/progress.md` sudah updated dengan milestone selesai
-- [ ] `docs/decisions.md` sudah mencatat semua ADR penting
-- [ ] `docs/changelog.md` sudah updated
-- [ ] `context/known-issues.md` sudah mencatat semua gotchas
-
-### ✅ Project Runs
-
-- [ ] Project bisa dijalankan dengan `make run` atau equivalent
-- [ ] Health check endpoint (`/health`) return 200
-- [ ] Tidak ada runtime error saat startup
-- [ ] Project bisa connect ke database
+### 6. 📊 Task Tracking & Documentation
+- [ ] Task di `tasks/` sudah di-mark `[x]`.
+- [ ] `tasks/_index.md` sudah diupdate.
+- [ ] Keputusan arsitektur penting dicatat di `docs/decisions.md`.
 
 ---
 
-## Cara Pakai dengan AI
+## 🏆 Final Release Checklist (Sebelum Go-Live)
 
-Setelah selesai satu modul, kirim prompt ini ke AI:
-
-```
-Tolong validasi modul [auth/user/product] yang sudah diimplementasi
-menggunakan checklist di context/qa-checklist.md.
-
-Cek:
-1. Spec coverage — semua endpoint dan business rule sudah ada?
-2. Code quality — ikuti conventions dan architecture?
-3. Tests — sudah ada dan pass?
-
-Laporkan hasilnya dan langsung perbaiki yang kurang.
-```
+- [ ] **100% Feature Parity**: Semua endpoint dari source project sudah ada di output target.
+- [ ] **OpenAPI Contract Tested**: Seluruh request/response telah divalidasi terhadap `specs/api-contracts/openapi.yaml`.
+- [ ] **Zero Dummy Code**: Audit repository membuktikan tidak ada data hardcoded mock tersisa.
+- [ ] **Framework Validation Pass**: `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`) menghasilkan `0 errors, 0 warnings`.
+- [ ] **Build & Run Pass**: Project target berhasil di-build dan di-run tanpa runtime error saat startup.

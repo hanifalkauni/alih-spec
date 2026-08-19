@@ -168,3 +168,49 @@ Semua error response harus mengikuti format:
 ```json
 { "success": false, "message": "...", "errors": {...} }
 ```
+
+---
+
+## 💎 8 Critical Quality Guardrails (Standar Mutu Enterprise)
+
+### [RULE-QUAL-01] DateTime & Timezone Serialization Parity
+**Modul**: Semua DTO & Serializer
+**Status**: [x] Mandatory Directives
+Format string tanggal dan timezone (misal: YYYY-MM-DD HH:mm:ss pada timezone lokal atau RFC3339) pada output target wajib 100% identik dengan format API sumber agar frontend/mobile app tidak mengalami error parsing.
+
+### [RULE-QUAL-02] Currency & Numeric Precision (Anti-Floating Point Error)
+**Modul**: Wallet, Coin, Product, Transaksi
+**Status**: [x] Mandatory Directives
+Dilarang menggunakan loat32/loat64 untuk saldo, koin, poin, atau mata uang. Gunakan integer terkecil (int64) atau library presisi eksak (shopspring/decimal di Go, BigDecimal di Java, Decimal di Python).
+
+### [RULE-QUAL-03] Pagination Envelope & Offset Parity
+**Modul**: Semua Endpoint List/Koleksi
+**Status**: [x] Mandatory Directives
+Struktur metadata pagination (current_page, rom, last_page, per_page, 	otal) dan perhitungan offset (offset = (page - 1) * per_page) wajib identik dengan perilaku framework sumber.
+
+### [RULE-QUAL-04] Validation Error Envelope Parity (Object of Arrays)
+**Modul**: HTTP Handler & Middleware Validator
+**Status**: [x] Mandatory Directives
+Format pesan validasi HTTP 422 wajib konsisten dengan format konsumsi frontend: {"message": "...", "errors": {"field": ["error message"]}}.
+
+### [RULE-QUAL-05] Concurrency & Row-Level Locking (Pessimistic Locking)
+**Modul**: Mutasi Saldo, Kuota, Stok & Transaksi Finansial
+**Status**: [x] Mandatory Directives
+Setiap operasi pengurangan saldo/stok yang berpotensi race condition wajib menggunakan transaksi dan *Row-Level Locking* (SELECT ... FOR UPDATE / clause.Locking{Strength: "UPDATE"}).
+
+### [RULE-QUAL-06] Soft Delete Leakage Prevention in Manual Joins
+**Modul**: Repository Layer & Raw SQL
+**Status**: [x] Mandatory Directives
+Setiap query manual JOIN atau Raw SQL wajib menyertakan filter AND [table].deleted_at IS NULL secara eksplisit agar data soft-deleted tidak bocor ke perhitungan/API response.
+
+### [RULE-QUAL-07] JWT Claims Key Parity & Header Extraction
+**Modul**: Auth Middleware & Token Generator
+**Status**: [x] Mandatory Directives
+Nama key klaim payload JWT pada target (sub, uid, user_id, oles) wajib persis sama dengan payload token sumber agar user ID tidak bernilai kosong atau default nol.
+
+### [RULE-QUAL-08] Empty State Contract (Empty Array vs Null)
+**Modul**: Semua Endpoint
+**Status**: [x] Mandatory Directives
+Respons data koleksi yang kosong wajib konsisten mengembalikan array kosong [] (bukan 
+ull), dan detail record tunggal yang tidak ditemukan wajib mengembalikan HTTP 404 atau 
+ull.
