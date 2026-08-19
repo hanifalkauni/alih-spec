@@ -1,4 +1,4 @@
-﻿# Module Spec: Product
+# Module Spec: Product
 
 ## 🎯 Spec Definition of Done (DoD) Checklist
 - [x] **Validation & Query Parity**: Query params (category_id, search, min_price, max_price, page, per_page) tercatat.
@@ -44,8 +44,8 @@ listing, search, create, update, and delete.
 | `per_page` | int | No | Per page (default: 15, max: 100) |
 | `search` | string | No | Search by name |
 | `category_id` | int | No | Filter by category |
-| `min_price` | float | No | Minimum price filter |
-| `max_price` | float | No | Maximum price filter |
+| `min_price` | int | No | Minimum price filter (in cents) |
+| `max_price` | int | No | Maximum price filter (in cents) |
 | `sort` | string | No | `price_asc`, `price_desc`, `newest` |
 
 **Success Response** `200 OK`:
@@ -57,7 +57,7 @@ listing, search, create, update, and delete.
       "id": 1,
       "name": "Product Name",
       "description": "...",
-      "price": 99.99,
+      "price": 9999,
       "stock": 100,
       "category_id": 1,
       "created_at": "..."
@@ -92,7 +92,7 @@ listing, search, create, update, and delete.
 {
   "name": "string (required, min:2, max:255)",
   "description": "string (optional)",
-  "price": "number (required, min:0)",
+  "price": "integer (required, min:0, basis sen/cents)",
   "stock": "integer (required, min:0)",
   "category_id": "integer (required)"
 }
@@ -131,7 +131,7 @@ listing, search, create, update, and delete.
 
 ## Business Rules
 
-- [ ] Price tidak boleh negatif
+- [ ] Price tidak boleh negatif (disimpan dalam `int64` basis terkecil/sen)
 - [ ] Stock tidak boleh negatif
 - [ ] Product name harus unik per category
 - [ ] Product yang dihapus adalah soft delete
@@ -146,8 +146,8 @@ listing, search, create, update, and delete.
 type Product struct {
     gorm.Model
     Name        string   `gorm:"size:255;not null" json:"name"`
-    Description string   `gorm:"type:text" json:"description"`
-    Price       float64  `gorm:"not null;check:price >= 0" json:"price"`
+    Description *string  `gorm:"type:text" json:"description,omitempty"`
+    Price       int64    `gorm:"not null;check:price >= 0" json:"price"` // int64 basis sen (Anti-Floating Point)
     Stock       int      `gorm:"not null;default:0" json:"stock"`
     CategoryID  uint     `gorm:"not null" json:"category_id"`
     Category    Category `gorm:"foreignKey:CategoryID" json:"category,omitempty"`

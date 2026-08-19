@@ -1,4 +1,4 @@
-﻿# ⚡ Bank Prompt Vibe Coding (AlihSpec SDD) — Edisi Standar Mutu Enterprise
+# ⚡ Bank Prompt Vibe Coding (AlihSpec SDD) — Edisi Standar Mutu Enterprise
 
 > Kumpulan prompt siap pakai berpresisi tinggi untuk kamu yang ingin **Full Vibe Coding**.
 > Dirancang khusus untuk memandu AI Coding Agents (Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code) agar menghasilkan konversi kode yang **100% akurat, zero logic drift, dan bebas bug laten**.
@@ -115,7 +115,11 @@ Instruksi Wajib Eksekusi:
    - Handler di `output/internal/handler/`
    - Route registration di `output/internal/router/api.go`
 3. Pastikan kode mengikuti arsitektur di `specs/architecture.md` dan konvensi di `context/conventions.md`.
-4. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
+4. Pelihara buku catatan & audit trail proyek secara otomatis:
+   - Catat alasan arsitektur di `docs/decisions.md` (ADR) jika ada pemilihan library/desain baru.
+   - Catat deviasi teknis di `docs/mapping-log.md` jika ada fitur sumber yang tidak bisa di-map 1:1.
+   - Catat modul yang selesai di `docs/changelog.md` dan log milestone di `docs/progress.md`.
+5. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
 ```
 
 ---
@@ -128,7 +132,8 @@ Tolong lakukan audit verifikasi silang (Checkpoint 2: Code vs Spec Parity) untuk
 2. Periksa apakah seluruh endpoint menangani mode query parameter (`?menu=...`, `?tab=...`) dan mengembalikan DTO yang sesuai?
 3. Periksa apakah field opsional mengembalikan `null` yang aman (bukan `0` atau `""`)?
 4. Jalankan unit test dan integration test di `output/tests/`.
-5. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
+5. Pastikan dokumentasi audit trail di `docs/changelog.md`, `docs/progress.md`, dan `docs/decisions.md` telah diperbarui.
+6. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
 ```
 
 ---
@@ -179,8 +184,9 @@ Semua modul telah selesai dikonversi. Tolong lakukan validasi kualitas menyeluru
 1. Jalankan validator integritas framework: `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`).
 2. Periksa seluruh checklist di `context/qa-checklist.md` (Spec coverage, code quality, 8 enterprise standards, feature parity).
 3. Jalankan seluruh test suite di `output/` dan pastikan 0 failure.
-4. Tampilkan dashboard progres akhir melalui `.\scripts\alih.ps1 status`.
-5. Sajikan laporan kesiapan perilisan (Release Readiness Report).
+4. Update milestone final "Conversion Complete" di `docs/progress.md` dan `docs/changelog.md`.
+5. Tampilkan dashboard progres akhir melalui `.\scripts\alih.ps1 status`.
+6. Sajikan laporan kesiapan perilisan (Release Readiness Report).
 ```
 
 ---
@@ -197,6 +203,7 @@ Tolong lakukan konversi secara bertahap (Iteratif per modul) dengan mematuhi ATU
 LANGKAH 1 — ANALISIS & ARSITEKTUR:
 - Scan `source/` dan petakan seluruh modul, endpoint, query params, relasi DB, dan JWT claims.
 - Tuliskan ringkasan arsitektur ke `specs/overview.md` dan `specs/architecture.md`.
+- Catat milestone inisialisasi di `docs/progress.md`.
 
 LANGKAH 2 — SETUP OUTPUT PROJECT:
 - Inisialisasi scaffold project target di `output/` sesuai `context/tech-stack.md` dan konvensi di `context/conventions.md`.
@@ -210,11 +217,13 @@ Untuk setiap modul bisnis:
   d. Tulis kode target di `output/` (DTO ➔ Domain ➔ Repository Real Queries ➔ Service Logic ➔ Handler ➔ Tests).
   e. DILARANG KERAS menggunakan data dummy/fallback hardcoded pada repository!
   f. Eksekusi Checkpoint 2 (Validasi zero dummy data & OpenAPI contract match).
-  g. Tandai task [x] di `tasks/_index.md`.
+  g. Pelihara audit trail: catat ADR baru di `docs/decisions.md`, deviasi teknis di `docs/mapping-log.md`, riwayat penambahan modul di `docs/changelog.md`, dan milestone di `docs/progress.md`.
+  h. Tandai task [x] di `tasks/_index.md`.
 
 LANGKAH 4 — VALIDASI & RELEASE QA:
 - Jalankan `.\scripts\alih.ps1 validate` untuk memastikan integritas 100%.
 - Jalankan seluruh unit & integration test suite di `output/`.
+- Update status rilis akhir di `docs/progress.md` dan `docs/changelog.md`.
 - Sajikan dashboard status akhir dari `.\scripts\alih.ps1 status`.
 
 Berikan laporan progres setiap kali menyelesaikan 1 modul. Berhenti dan tanyakan kepada saya jika menemukan ambiguitas logika bisnis yang tidak tercantum di kode sumber.

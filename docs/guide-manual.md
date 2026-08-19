@@ -247,24 +247,29 @@ specs/modules/
 └── payment.md     ← kamu buat
 ```
 
-**Cara membuat spec baru:**
+**Cara membuat spec baru (Wajib Anti-Shallow Specs):**
 1. Copy `specs/modules/_template.md`
-2. Rename sesuai modul
-3. Isi setiap bagian:
-   - Overview
-   - Source reference (file di source/ yang relevan)
-   - API Endpoints (copy dari openapi.yaml)
-   - Business Rules (dari source code dan requirement)
-   - DTO Structs (definisi request/response)
-   - Interface (method signatures)
-   - Acceptance Criteria
-   - Test Cases
+2. Rename sesuai modul (contoh: `order.md`)
+3. Lakukan **Deep Controller AST Inspection** pada file controller sumber baris-demi-baris:
+   - Catat semua query parameter (`?menu=`, `?tab=`, `?filter=`, `?page=`)
+   - Petakan semua percabangan internal `if/switch` ke **Internal Branching Matrix**
+   - Catat semua relasi tabel, JOIN (LEFT/INNER), GroupBy, dan kalkulasi agregat
+   - Gunakan tipe pointer (`*int64`, `*string`, `*bool`) untuk field nullable pada DTO Target
+4. Isi checklist **Spec Definition of Done (DoD)** di bagian atas berkas:
+   - [ ] Validation & Query Parity
+   - [ ] Branching Logic Parity
+   - [ ] SQL & Table Join Parity
+   - [ ] Pointer Nullability Parity
+   - [ ] No Dummy Fallback
 
-**Lihat `specs/modules/auth.md` sebagai contoh lengkap.**
+#### 2.4 — 🛑 CHECKPOINT 1: Validasi Spec vs Source Alignment
+Sebelum melanjutkan ke pembuatan tasks, lakukan verifikasi silang:
+- Bandingkan berkas `specs/modules/[modul].md` terhadap controller di `source/`.
+- Pastikan tidak ada query param atau logika percabangan yang terlewat.
 
 ---
 
-## ✅ FASE 3: Buat Task Breakdown
+## ✅ FASE 3: Buat Task Breakdown Berlapis
 
 ### 3.1 — Tentukan fase
 
@@ -273,7 +278,7 @@ Bagi task ke dalam fase logis:
 - **Phase 2: Core Modules** — Semua modul bisnis utama
 - **Phase 3: Integration** — Route wiring, tests, CI/CD
 
-### 3.2 — Buat task files
+### 3.2 — Buat task files (Layer-by-Layer)
 
 Untuk setiap task, copy `tasks/_template.md` dan buat file baru:
 
@@ -293,18 +298,18 @@ tasks/
 
 **Format nama**: `task-[NNN]-[nama-kebab-case].md`
 
-**Isi setiap task file dengan:**
-- Status (Not Started)
-- Priority (High/Medium/Low)
-- Phase
-- Estimasi waktu
-- Dependencies (task lain yang harus selesai dulu)
-- Description
-- Source reference
-- Sub-tasks (checklist detail)
-- Acceptance criteria
+**Pecah sub-task secara berlapis (Layer-by-Layer):**
+1. **Layer 1 (DTO)**: Request & Response structs dengan validasi dan pointer nullability.
+2. **Layer 2 (Domain & Interface)**: Entity model dan kontrak interface repository/usecase.
+3. **Layer 3 (Repository)**: Query database riil (*Strict No Dummy Fallback*, row-level locking pada transaksi saldo/stok).
+4. **Layer 4 (Service / UseCase)**: Logika percabangan kondisi dan kalkulasi bisnis.
+5. **Layer 5 (HTTP Handler & Router)**: Request binding, response formatting, route registration.
+6. **Layer 6 (Testing)**: Unit & Integration tests.
 
-### 3.3 — Update `tasks/_index.md`
+### 3.3 — 🛑 CHECKPOINT 2: Task vs Spec Alignment
+Sebelum menulis kode di `output/`, pastikan task mencakup seluruh kriteria dan DTO yang telah didefinisikan di spec modul.
+
+### 3.4 — Update `tasks/_index.md`
 
 Buka [`tasks/_index.md`](../tasks/_index.md) dan:
 - Tambahkan semua task ke tabel per fase
@@ -313,21 +318,23 @@ Buka [`tasks/_index.md`](../tasks/_index.md) dan:
 
 ---
 
-## 🔨 FASE 4: Konversi
+## 🔨 FASE 4: Konversi (Strict Zero Dummy)
 
 ### Workflow per task:
 
 ```
 1. Buka task file di tasks/phase-X/task-NNN-*.md
-2. Tandai status: [/] In Progress
-3. Baca spec di specs/modules/[module].md
-4. Baca .sdd/mapping/patterns.md untuk concept mapping
-5. Baca context/conventions.md untuk naming rules
-6. Buka source file referensi di source/
-7. Tulis implementasi di output/
-8. Tandai sub-tasks satu per satu
-9. Tandai status: [x] Done di tasks/_index.md
-10. Tulis catatan jika ada keputusan teknis di docs/decisions.md
+2. Verifikasi Checkpoint 2 (Pre-Implementation Check)
+3. Tandai status: [/] In Progress
+4. Baca spec di specs/modules/[module].md & context/RULES.md
+5. Baca .sdd/mapping/patterns.md untuk concept mapping
+6. Baca context/conventions.md untuk naming rules
+7. Buka source file referensi di source/
+8. Tulis implementasi di output/ lapis demi lapis (DTO ➔ Domain ➔ Repo ➔ Service ➔ Handler)
+9. Jalankan unit test & verifikasi 8 Standar Mutu Enterprise
+10. Tandai sub-tasks satu per satu
+11. Tandai status: [x] Done di tasks/_index.md
+12. Tulis catatan jika ada keputusan teknis di docs/decisions.md
 ```
 
 ### Aturan coding yang wajib diikuti:
@@ -336,6 +343,9 @@ Buka [`tasks/_index.md`](../tasks/_index.md) dan:
 - ✅ Ikuti folder structure dari `specs/architecture.md`
 - ✅ Ikuti naming dari `context/conventions.md`
 - ✅ Handler → Service → Repository (jangan skip layer)
+- ✅ **Strict No Dummy**: Seluruh method repository wajib kueri database riil
+- ✅ **Pointer Nullability**: Gunakan pointer pada field opsional/nullable di DTO
+- ✅ **Anti-Floating Point**: Gunakan integer (basis sen) atau decimal untuk uang/saldo
 - ✅ Selalu definisikan interface sebelum implementasi
 - ✅ Sertakan komentar header file dengan source reference
 
@@ -348,7 +358,9 @@ Tolong implementasikan [nama file/fungsi] berdasarkan:
 - Source referensi: source/[path/ke/file]
 - Architecture: specs/architecture.md
 - Conventions: context/conventions.md
+- Rules: context/RULES.md
 
+Pastikan kueri repository riil (tanpa dummy data) dan field nullable bertipe pointer.
 Tulis ke output/[path yang benar].
 ```
 
@@ -397,12 +409,12 @@ Pastikan menghasilkan `RESULT: Framework 100% VALID AND HEALTHY!`.
 Setelah setiap modul selesai, jalankan checklist:
 👉 Buka [`context/qa-checklist.md`](../context/qa-checklist.md) bagian **Per-Modul Checklist**
 
-Centang setiap item sebelum tandai task sebagai Done.
+Centang setiap item (termasuk 8 Enterprise Quality Standards) sebelum tandai task sebagai Done.
 
 ### 5.2 — Final validation
 
 Setelah semua task selesai, jalankan:
-👉 Buka `context/qa-checklist.md` bagian **Final Release Checklist**
+👉 Buka [`context/qa-checklist.md`](../context/qa-checklist.md) bagian **Final Release Checklist**
 
 ### 5.3 — Verifikasi manual
 
@@ -451,13 +463,16 @@ tasks/_index.md    ← Pastikan semua task [x]
 
 | File | Kapan Dibuka |
 |------|-------------|
-| [`context/AGENTS.md`](../context/AGENTS.md) | Setup awal, isi source project notes |
+| [`context/AGENTS.md`](../context/AGENTS.md) | Setup awal, instruksi AI master |
+| [`evaluate/evaluation-specs-mismatch.md`](../evaluate/evaluation-specs-mismatch.md) | Panduan audit anti-shallow spec |
 | [`context/checklist-before-start.md`](../context/checklist-before-start.md) | Verifikasi sebelum mulai |
+| [`context/RULES.md`](../context/RULES.md) | Cek aturan bisnis & kualitas |
 | [`.sdd/mapping/patterns.md`](../.sdd/mapping/patterns.md) | Referensi saat konversi |
 | [`context/conventions.md`](../context/conventions.md) | Referensi saat coding |
 | [`context/glossary.md`](../context/glossary.md) | Cek padanan istilah |
 | [`specs/architecture.md`](../specs/architecture.md) | Cek path output yang benar |
 | [`tasks/_index.md`](../tasks/_index.md) | Update progress setiap hari |
 | [`context/qa-checklist.md`](../context/qa-checklist.md) | Validasi setiap modul |
-| [`docs/decisions.md`](decisions.md) | Catat keputusan teknis |
-| [`docs/mapping-log.md`](mapping-log.md) | Catat mapping gap |
+| [`docs/decisions.md`](./decisions.md) | Catat keputusan teknis (ADR) |
+| [`docs/mapping-log.md`](./mapping-log.md) | Catat mapping gap & deviasi |
+| [`docs/efficiency-benchmark.md`](./efficiency-benchmark.md) | Evaluasi KPI efisiensi |

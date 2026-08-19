@@ -1,4 +1,4 @@
-﻿# ⚡ Vibe Coding Guide — Konversi Project dengan AI (AlihSpec SDD)
+# ⚡ Vibe Coding Guide — Konversi Project dengan AI (AlihSpec SDD)
 
 > Untuk kamu yang ingin **zero manual work**.
 > Cukup copy-paste prompt ke AI agent dan review hasilnya.
@@ -157,7 +157,11 @@ Instruksi Wajib Eksekusi:
    - Handler di `output/internal/handler/`
    - Route registration di `output/internal/router/api.go`
 3. Pastikan kode mengikuti arsitektur di `specs/architecture.md` dan konvensi di `context/conventions.md`.
-4. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
+4. Pelihara buku catatan & audit trail proyek secara otomatis:
+   - Catat alasan arsitektur di `docs/decisions.md` (ADR) jika ada pemilihan library/desain baru.
+   - Catat deviasi teknis di `docs/mapping-log.md` jika ada fitur sumber yang tidak bisa di-map 1:1.
+   - Catat modul yang selesai di `docs/changelog.md` dan log milestone di `docs/progress.md`.
+5. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
 ```
 
 ### 🛑 CHECKPOINT 2: Audit Keselarasan Kode Target vs Spesifikasi
@@ -169,7 +173,8 @@ Tolong lakukan audit verifikasi silang (Checkpoint 2: Code vs Spec Parity) untuk
 2. Periksa apakah seluruh endpoint menangani mode query parameter (`?menu=...`, `?tab=...`) dan mengembalikan DTO yang sesuai?
 3. Periksa apakah field opsional mengembalikan `null` yang aman (bukan `0` atau `""`)?
 4. Jalankan unit test dan integration test di `output/tests/`.
-5. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
+5. Pastikan dokumentasi audit trail di `docs/changelog.md`, `docs/progress.md`, dan `docs/decisions.md` telah diperbarui.
+6. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
 ```
 
 ---
@@ -191,9 +196,23 @@ Semua modul telah selesai dikonversi. Tolong lakukan validasi kualitas menyeluru
 1. Jalankan validator integritas framework: `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`).
 2. Periksa seluruh checklist di `context/qa-checklist.md` (Spec coverage, code quality, 8 enterprise standards, feature parity).
 3. Jalankan seluruh test suite di `output/` dan pastikan 0 failure.
-4. Tampilkan dashboard progres akhir melalui `.\scripts\alih.ps1 status`.
-5. Sajikan laporan kesiapan perilisan (Release Readiness Report).
+4. Update milestone final "Conversion Complete" di `docs/progress.md` dan `docs/changelog.md`.
+5. Tampilkan dashboard progres akhir melalui `.\scripts\alih.ps1 status`.
+6. Sajikan laporan kesiapan perilisan (Release Readiness Report).
 ```
+
+---
+
+## 📚 Panduan Berkas Audit Trail & Memory System (docs/)
+
+Selama proses vibe coding, AI akan memelihara berkas-berkas berikut secara otomatis:
+
+| Berkas | Kapan Diperbarui Otomatis? | Fungsi Utama |
+|---|---|---|
+| 📈 [`docs/progress.md`](./progress.md) | Setiap modul/fase selesai | Log pencapaian milestone & rekap status sesi untuk handover ke AI/sesi baru. |
+| 🏛️ [`docs/decisions.md`](./decisions.md) | Saat ada keputusan arsitektur (ADR) | Mencatat alasan (*WHY*) di balik pemilihan library, pattern, atau konfigurasi. |
+| 🗺️ [`docs/mapping-log.md`](./mapping-log.md) | Saat ada fitur yang tidak bisa 1:1 | Mencatat deviasi atau workaround teknis dari bahasa sumber ke target. |
+| 📝 [`docs/changelog.md`](./changelog.md) | Setiap rilis modul baru | Riwayat penambahan ([Added]), perubahan ([Changed]), dan perbaikan ([Fixed]). |
 
 ---
 

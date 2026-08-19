@@ -18,8 +18,7 @@
   copy .sdd\presets\laravel-to-go\patterns.md .sdd\mapping\patterns.md
   copy .sdd\presets\laravel-to-go\conventions.md .sdd\mapping\conventions.md
   ```
-  > Preset tersedia: `laravel-to-go`, `laravel-to-nestjs`, `django-to-fastapi`,
-  > `rails-to-nodejs`, `spring-to-go`, `express-to-nestjs`
+  > Preset tersedia: `laravel-to-go`, `laravel-to-nestjs`, `laravel-to-fastapi`, `codeigniter-to-go`, `codeigniter-to-laravel`, `php-native-to-laravel`, `django-to-fastapi`, `rails-to-nodejs`, `spring-to-go`, `express-to-go`, `express-to-nestjs` (atau `_custom-template`).
 
 ---
 
@@ -59,9 +58,11 @@
 ## Step 4 — Buat Specs (Jika Tidak Pakai Vibe Coding)
 
 - [ ] **Edit `specs/overview.md`** — isi Background, Scope, dan Module Breakdown
-- [ ] **Buat `specs/modules/[modul].md`** untuk setiap modul utama
+- [ ] **Buat `specs/modules/[modul].md`** untuk setiap modul utama (wajib lolos Spec DoD Checklist):
   > Gunakan `specs/modules/_template.md` sebagai template
+  > Lakukan Deep Controller AST Inspection (catat semua query param, branching `if/switch`, dan relasi join)
   > Lihat `specs/modules/auth.md` sebagai contoh lengkap
+- [ ] **Verifikasi Checkpoint 1**: Cocokkan spec modul dengan controller sumber
 
 - [ ] **Edit `specs/data-models/schema.md`** — dokumentasikan semua tabel DB
 - [ ] **Edit `specs/api-contracts/openapi.yaml`** — dokumentasikan semua endpoint
@@ -70,8 +71,9 @@
 
 ## Step 5 — Buat Task List (Jika Tidak Pakai Vibe Coding)
 
-- [ ] **Buat task files** di `tasks/phase-X/` untuk setiap modul
+- [ ] **Buat task files** di `tasks/phase-X/` untuk setiap modul (pecah layer DTO ➔ Domain ➔ Repo ➔ Service ➔ Handler)
   > Gunakan `tasks/_template.md` sebagai template
+- [ ] **Verifikasi Checkpoint 2**: Pastikan task mencakup semua DTO dan kriteria spec
 - [ ] **Update `tasks/_index.md`** dengan semua task dan estimasi
 
 ---

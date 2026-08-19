@@ -1,4 +1,4 @@
-# 🚪 Pilih Cara Kerjamu
+﻿# 🚪 Pilih Cara Kerjamu
 
 > Halaman ini membantumu memilih guide yang paling sesuai.
 
@@ -60,3 +60,17 @@ pause di setiap fase untuk review sebelum lanjut.
 | Validasi hasil QA | [`context/qa-checklist.md`](../context/qa-checklist.md) |
 | Template modul baru | [`specs/modules/_template.md`](../specs/modules/_template.md) |
 | Template task baru | [`tasks/_template.md`](../tasks/_template.md) |
+
+---
+
+## 📚 Panduan Berkas Dokumentasi & Audit Trail (docs/)
+
+Folder docs/ berfungsi sebagai buku catatan dan audit trail selama proses migrasi:
+
+| Berkas | Kapan Harus Diisi / Dilihat? | Fungsi Utama |
+|---|---|---|
+| 📈 [docs/progress.md](./progress.md) | **Setiap Selesai Fase Besar / Pause Sesi** | Log pencapaian milestone dan ringkasan status sesi untuk AI/developer berikutnya. |
+| 🏛️ [docs/decisions.md](./decisions.md) | **Saat Membuat Keputusan Arsitektural (ADR)** | Mencatat alasan (*WHY*) di balik pemilihan teknologi, library, atau arsitektur tertentu. |
+| 🗺️ [docs/mapping-log.md](./mapping-log.md) | **Saat Ada Fitur Sumber yang Tidak Bisa 1:1** | Log deviasi teknis saat fitur di bahasa sumber tidak memiliki padanan langsung di target. |
+| 📝 [docs/changelog.md](./changelog.md) | **Setiap Selesai Mengonversi Modul / Rilis** | Riwayat penambahan fitur (Added), perubahan (Changed), dan perbaikan bug (Fixed). |
+| ⚡ [docs/efficiency-benchmark.md](./efficiency-benchmark.md) | **Saat Evaluasi KPI & Pengujian Efisiensi** | Metrik kuantitatif efisiensi waktu (~70%), penghematan token, dan scorecard pengujian. |
