@@ -215,7 +215,8 @@ Jika Anda adalah AI Coding Assistant (**Antigravity, Cursor, Kiro, Copilot, Wind
 |---|---|---|
 | [`docs/START-HERE.md`](./docs/START-HERE.md) | Orientasi awal | Panduan memilih jalur kerja (Vibe vs Manual vs Hybrid) |
 | [`evaluate/evaluation-specs-mismatch.md`](./evaluate/evaluation-specs-mismatch.md) | Audit & Evaluasi | Panduan anti-shallow spec, studi kasus nyata, & 8 standar mutu |
-| [`context/VIBE.md`](./context/VIBE.md) | Eksekusi Vibe Coding | Bank 13 prompt presisi berstandar enterprise siap pakai |
+| [`docs/prompt-queue.md`](./docs/prompt-queue.md) | Eksekusi Vibe Coding | Antrean prompt siap copy-paste (nama modul & controller sudah terisi) |
+| [`context/VIBE.md`](./context/VIBE.md) | Bank Prompt Vibe | Bank 13 prompt presisi berstandar enterprise siap pakai |
 | [`context/RULES.md`](./context/RULES.md) | Validasi Bisnis | Single registry seluruh aturan bisnis & guardrails arsitektur |
 | [`context/qa-checklist.md`](./context/qa-checklist.md) | QA & Rilis | Checklist verifikasi kualitas komprehensif sebelum rilis |
 | [`docs/efficiency-benchmark.md`](./docs/efficiency-benchmark.md) | Evaluasi KPI | Analisis efisiensi waktu (~70%), penghematan token & scorecard |

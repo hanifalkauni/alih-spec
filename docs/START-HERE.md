@@ -1,4 +1,4 @@
-﻿# 🚪 Pilih Cara Kerjamu
+# 🚪 Pilih Cara Kerjamu
 
 > Halaman ini membantumu memilih guide yang paling sesuai.
 
@@ -55,7 +55,8 @@ pause di setiap fase untuk review sebelum lanjut.
 | Validasi integritas & link | `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`) |
 | Preset tidak tersedia | [`.sdd/presets/CUSTOM-PRESET-GUIDE.md`](../.sdd/presets/CUSTOM-PRESET-GUIDE.md) |
 | Benchmark & KPI Efisiensi | [`docs/efficiency-benchmark.md`](./efficiency-benchmark.md) |
-| Prompt siap pakai | [`context/VIBE.md`](../context/VIBE.md) |
+| Antrean prompt terisi otomatis | [`docs/prompt-queue.md`](./prompt-queue.md) |
+| Prompt siap pakai (Bank) | [`context/VIBE.md`](../context/VIBE.md) |
 | Checklist sebelum mulai | [`context/checklist-before-start.md`](../context/checklist-before-start.md) |
 | Validasi hasil QA | [`context/qa-checklist.md`](../context/qa-checklist.md) |
 | Template modul baru | [`specs/modules/_template.md`](../specs/modules/_template.md) |
@@ -65,10 +66,11 @@ pause di setiap fase untuk review sebelum lanjut.
 
 ## 📚 Panduan Berkas Dokumentasi & Audit Trail (docs/)
 
-Folder docs/ berfungsi sebagai buku catatan dan audit trail selama proses migrasi:
+Folder docs/ berfungsi sebagai buku catatan, antrean prompt, dan audit trail selama proses migrasi:
 
 | Berkas | Kapan Harus Diisi / Dilihat? | Fungsi Utama |
 |---|---|---|
+| ⚡ [docs/prompt-queue.md](./prompt-queue.md) | **Saat Eksekusi Vibe Coding (Fase 2-4)** | Antrean prompt siap copy-paste yang sudah terisi nama modul dan controller sumber. |
 | 📈 [docs/progress.md](./progress.md) | **Setiap Selesai Fase Besar / Pause Sesi** | Log pencapaian milestone dan ringkasan status sesi untuk AI/developer berikutnya. |
 | 🏛️ [docs/decisions.md](./decisions.md) | **Saat Membuat Keputusan Arsitektural (ADR)** | Mencatat alasan (*WHY*) di balik pemilihan teknologi, library, atau arsitektur tertentu. |
 | 🗺️ [docs/mapping-log.md](./mapping-log.md) | **Saat Ada Fitur Sumber yang Tidak Bisa 1:1** | Log deviasi teknis saat fitur di bahasa sumber tidak memiliki padanan langsung di target. |

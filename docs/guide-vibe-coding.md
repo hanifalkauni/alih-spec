@@ -53,7 +53,7 @@ git submodule add https://github.com/your/project.git source
 
 ---
 
-## 🤖 FASE 1: Analisis Mendalam Source Project
+## 🤖 FASE 1: Analisis Mendalam Source Project & Generate Prompt Queue
 
 ### Kirim prompt ini ke AI:
 
@@ -70,13 +70,22 @@ Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
    - Seluruh Schema Database, Relasi antar Tabel (1:1, 1:N, N:M), Foreign Keys, Enum values, dan Index
    - Dependensi penting pihak ketiga dari package manager (composer.json / package.json / requirements.txt)
    - Identifikasi algoritma hashing password dan struktur token JWT asli (nama key payload/claims: sub, uid, user_id, dll.)
-
-Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
+4. Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
+5. Buatkan berkas antrean prompt siap pakai di `docs/prompt-queue.md`:
+   - Buatkan daftar prompt siap copy-paste untuk SETIAP modul yang ditemukan.
+   - Isi otomatis placeholder nama modul, path controller sumber, dan path task-nya (pre-filled).
+   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt untuk setiap modul.
 ```
 
 ---
 
 ## 📋 FASE 2: Tulis Spesifikasi Modul (Deep AST Inspection)
+
+> 💡 **TIPS VIBE CODER (Zero Text Editing)**:  
+> Setelah Fase 1 selesai, **buka berkas [`docs/prompt-queue.md`](./prompt-queue.md)**!  
+> Semua prompt di bawah ini sudah di-generate otomatis dan sudah terisi lengkap dengan nama modul dan file controller Anda. Anda tinggal copy-paste langsung dari sana tanpa perlu mengganti placeholder `[NAMA_MODUL]`.
+> 
+> *Atau, jika ingin copy manual dari panduan ini, gunakan template prompt di bawah:*
 
 ### Kirim prompt ini ke AI:
 
