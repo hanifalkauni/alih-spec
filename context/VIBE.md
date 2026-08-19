@@ -1,7 +1,14 @@
-﻿# ⚡ Bank Prompt Vibe Coding (AlihSpec SDD)
+﻿# ⚡ Bank Prompt Vibe Coding (AlihSpec SDD) — Edisi Standar Mutu Enterprise
 
-> Kumpulan prompt siap pakai untuk kamu yang ingin **Vibe Coding** — biarkan AI yang menangani proses konversi dari awal sampai akhir.
-> Cukup copy-paste prompt di bawah ke chat AI agent kamu (Antigravity, Cursor, Kiro, Copilot, Windsurf, dll).
+> Kumpulan prompt siap pakai berpresisi tinggi untuk kamu yang ingin **Full Vibe Coding**.
+> Dirancang khusus untuk memandu AI Coding Agents (Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code) agar menghasilkan konversi kode yang **100% akurat, zero logic drift, dan bebas bug laten**.
+
+---
+
+## 🧭 Panduan Memilih Prompt
+
+- **Proyek Sedang / Besar (> 5 Modul)**: Gunakan **Prompt Fase 1 s/d Fase 5** secara bertahap dengan *Dual Validation Checkpoints*.
+- **Proyek Kecil (< 5 Modul)**: Gunakan **Prompt One-Shot Master** di bagian bawah.
 
 ---
 
@@ -9,183 +16,206 @@
 
 ---
 
-### 🔍 1. Analisis Source Project (Fase 1)
+### 🔍 1. Analisis Sumber Mendalam (Fase 1)
 
-```
-Saya baru setup AlihSpec framework untuk konversi project.
-Source project ada di folder source/.
+```markdown
+Saya baru menginisialisasi framework AlihSpec untuk mengonversi proyek ini.
+Source code proyek sumber berada di folder `source/`.
 
-Tolong lakukan hal berikut secara mendalam:
-1. Baca context/AGENTS.md dan evaluate/evaluation-specs-mismatch.md untuk memahami aturan konversi dan pencegahan shallow specs.
-2. Baca .sdd/config.yaml untuk mengetahui source dan target tech stack.
-3. Scan seluruh folder source/ dan buatkan laporan komprehensif berisi:
-   - Daftar semua modul/fitur yang ada (auth, user, product, transaksi, dll)
-   - Daftar semua endpoint/route (beserta HTTP method dan controller action)
-   - Daftar semua model database dan relasi antar tabel
-   - Dependensi penting dari package manager (composer.json / package.json / requirements.txt)
+Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
+1. Baca berkas `context/AGENTS.md` dan `evaluate/evaluation-specs-mismatch.md` untuk memahami standar mutu dan aturan pencegahan spesifikasi dangkal (shallow specs).
+2. Baca `.sdd/config.yaml` dan `context/tech-stack.md` untuk memahami bahasa dan framework target.
+3. Bedah seluruh folder `source/` dan buatkan laporan komprehensif yang mencakup:
+   - Daftar seluruh modul bisnis (Auth, User, Product, Wallet/Coin, Order, dll.)
+   - Pemetaan seluruh Route & Endpoint (HTTP Method, URI, Controller Action, Middleware terpasang)
+   - Seluruh Schema Database, Relasi antar Tabel (1:1, 1:N, N:M), Foreign Keys, Enum values, dan Index
+   - Dependensi penting pihak ketiga dari package manager (composer.json / package.json / requirements.txt)
+   - Identifikasi algoritma hashing password dan struktur token JWT asli (nama key payload/claims: sub, uid, user_id, dll.)
 
-Tulis ringkasannya ke specs/overview.md.
+Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
 ```
 
 ---
 
-### 📋 2. Tulis Spesifikasi Modul (Deep AST Inspection — Fase 2)
+### 📋 2. Tulis Spesifikasi Modul — Deep AST Inspection (Fase 2)
 
-```
-Tolong buatkan spesifikasi detail untuk modul [AUTH/USER/PRODUCT/nama modul] di specs/modules/[nama-modul].md.
+```markdown
+Tolong buatkan spesifikasi detail berstandar enterprise untuk modul [NAMA_MODUL] di `specs/modules/[nama-modul].md`.
 
-Gunakan template di specs/modules/_template.md dan ikuti aturan DEEP CONTROLLER AST INSPECTION:
+Gunakan template di `specs/modules/_template.md` dan terapkan aturan DEEP CONTROLLER AST INSPECTION & 8 CRITICAL QUALITY STANDARDS:
 1. Bedah controller sumber baris-demi-baris:
-   - Catat SEMUA query parameter (?menu=..., ?tab=..., ?filter=..., ?limit=..., ?offset=...)
-   - Petakan SEMUA percabangan internal (if/switch) dan mode respon berbeda ke dalam Branching Matrix
-   - Catat SEMUA kueri SQL, Table Joins (LEFT JOIN / INNER JOIN), GROUP BY, dan agregasi kalkulasi
-2. Pastikan DTO Struct menggunakan tipe POINTER (*int64, *string, *bool) untuk field yang nullable/opsional.
+   - Catat SEMUA query parameter (`?menu=...`, `?tab=...`, `?filter=...`, `?limit=...`, `?offset=...`, `?search=...`).
+   - Petakan SEMUA percabangan logika internal (`if/switch` dan mode respons berbeda) ke dalam tabel Branching Matrix.
+   - Catat SEMUA kueri SQL, Table Joins (LEFT/INNER JOIN), GROUP BY, dan agregasi kalkulasi (`COALESCE(SUM(...))`, dll.).
+2. Terapkan 8 Standar Mutu Enterprise pada Spesifikasi:
+   - [DateTime] Catat format serialisasi tanggal (`YYYY-MM-DD HH:mm:ss` / ISO 8601) dan timezone.
+   - [Currency/Points/Coins] Gunakan tipe `int64` (basis terkecil/sen) atau exact decimal — DILARANG `float64`.
+   - [Pagination] Catat struktur amplop pagination lengkap (`current_page`, `from`, `last_page`, `per_page`, `total`).
+   - [Validation Error] Format error HTTP 422 wajib berupa Object of String Arrays `{"errors": {"field": ["msg"]}}`.
+   - [Concurrency] Identifikasi operasi pengurangan saldo/stok yang memerlukan row-level locking (`SELECT ... FOR UPDATE`).
+   - [Soft Delete] Pastikan setiap join manual menyertakan filter `AND [table].deleted_at IS NULL`.
+   - [Pointer Nullability] Seluruh field DTO opsional/nullable WAJIB menggunakan tipe POINTER (`*int64`, `*string`, `*bool`).
+   - [Empty State] Koleksi list kosong wajib mengembalikan array kosong `[]` (bukan `null`).
 3. Lengkapi Spec Definition of Done (DoD) Checklist di bagian atas berkas.
-4. DILARANG membuat spesifikasi dangkal (shallow specs) yang menyederhanakan logika percabangan!
 
-Tunjukkan draft spec setelah selesai untuk saya review.
+Tunjukkan draf spesifikasi yang telah selesai untuk saya tinjau.
 ```
 
 ---
 
 ### 🛑 2B. Checkpoint 1: Verifikasi Keselarasan Spec vs Source
 
-```
-Tolong lakukan audit silang (Checkpoint 1: Spec vs Source Alignment) untuk modul [nama-modul]:
-1. Bandingkan controller sumber di source/ dengan specs/modules/[nama-modul].md.
-2. Periksa apakah ada query param, percabangan if/switch, atau join tabel di controller sumber yang belum tercatat di spec?
-3. Periksa apakah semua field opsional sudah bertipe pointer di DTO?
-4. Berikan checklist konfirmasi apakah spec sudah 100% lengkap dan siap dibuatkan task breakdown.
-```
-
----
-
-### 🗂️ 3. Buat Task Breakdown (Fase 3)
-
-```
-Berdasarkan spesifikasi di specs/modules/[nama-modul].md yang sudah diverifikasi:
-1. Buat file task terperinci di tasks/phase-2-core-modules/task-[nomor]-[nama-modul].md menggunakan template tasks/_template.md.
-2. Pecah sub-task secara berlapis: DTO ➔ Domain Entity ➔ Repository (Real Queries) ➔ Service/UseCase ➔ Handler ➔ Tests.
-3. Daftarkan task baru tersebut ke dalam tasks/_index.md secara rapi.
+```markdown
+Tolong lakukan audit silang verifikasi (Checkpoint 1: Spec vs Source Alignment) untuk modul [NAMA_MODUL]:
+1. Bandingkan controller sumber di `source/` baris-demi-baris dengan `specs/modules/[nama-modul].md`.
+2. Sajikan tabel konfirmasi audit dengan format:
+   | Item Audit | Status (Lengkap / Kurang) | Catatan Verifikasi |
+   |---|---|---|
+   | Semua Endpoint & HTTP Method | ... | ... |
+   | Semua Query Parameter (?menu=, dll) | ... | ... |
+   | Semua Percabangan if/switch Internal | ... | ... |
+   | Nullability & Pointer Types di DTO | ... | ... |
+   | Relasi Tabel, JOIN & Aggregasi DB | ... | ... |
+   | 8 Standar Mutu Enterprise | ... | ... |
+3. Jika ada parameter atau percabangan yang terlewat, langsung lengkapi spesifikasinya sekarang.
+4. Berikan konfirmasi final apakah spesifikasi sudah 100% siap dibuatkan task breakdown.
 ```
 
 ---
 
-### 🚀 4. Eksekusi Konversi Modul (Strict No Dummy Data — Fase 4)
+### 🗂️ 3. Buat Task Breakdown Berlapis (Fase 3)
 
-```
-Tolong konversi modul [nama-modul] dari source/ ke output/ sesuai task dan spesifikasinya.
-
-Aturan Wajib:
-1. Baca specs/modules/[nama-modul].md dan tasks/.../task-[nomor]-[nama-modul].md.
-2. Tulis kode target di output/:
-   - DTO structs di output/internal/dto/ (wajib pointer untuk field nullable)
-   - Domain model & interfaces di output/internal/domain/
-   - Repository di output/internal/repository/ (WAJIB query GORM/SQL riil, DILARANG KERAS menggunakan data dummy/fallback hardcoded!)
-   - Service / UseCase di output/internal/service/ (tangani semua percabangan if/switch sesuai branching matrix)
-   - HTTP Handler di output/internal/handler/
-   - Route registration di output/internal/router/api.go
-3. Update task status di tasks/_index.md menjadi [x] setelah selesai dan teruji.
+```markdown
+Berdasarkan spesifikasi di `specs/modules/[nama-modul].md` yang telah lolos Checkpoint 1:
+1. Buat berkas task terperinci di `tasks/phase-2-core-modules/task-[nomor]-[nama-modul].md` menggunakan template `tasks/_template.md`.
+2. Pecah sub-task secara terisolasi dan bertingkat (Layer-by-Layer):
+   - Layer 1: DTO Structs (dengan struct tags validation dan pointer types untuk field nullable)
+   - Layer 2: Domain Entities & Repository/UseCase Interfaces
+   - Layer 3: Repository Implementation (kueri database riil, anti-dummy, row-level locking jika mutasi saldo, filter soft-delete pada join)
+   - Layer 4: Service / UseCase Layer (implementasi seluruh percabangan kondisi dan kalkulasi bisnis)
+   - Layer 5: HTTP Handler & Route Wiring (DTO binding, error mapping, standard JSON response)
+   - Layer 6: Unit & Contract Tests
+3. Daftarkan task baru tersebut ke dalam tabel antrean di `tasks/_index.md`.
 ```
 
 ---
 
-### 🛑 4B. Checkpoint 2: Verifikasi Keselarasan Task vs Output Code
+### 🚀 4. Eksekusi Konversi Modul — Strict Zero Dummy (Fase 4)
 
-```
-Tolong lakukan audit silang (Checkpoint 2: Task vs Code Alignment) untuk modul [nama-modul]:
-1. Periksa apakah ada fungsi di Repository atau Service yang mengembalikan data dummy hardcoded?
-2. Periksa apakah semua endpoint mengembalikan struktur JSON yang identik dengan kontrak OpenAPI?
-3. Jalankan unit test / integrasi di output/.
-```
+```markdown
+Tolong konversi modul [NAMA_MODUL] dari `source/` ke `output/` sesuai spesifikasi dan task breakdown yang ada.
 
----
-
-### 🗄️ 5. Konversi Database Schema
-
-```
-Tolong konversi semua database schema dari source/ ke target:
-
-1. Baca semua migration files di source/database/migrations/ (atau setara).
-2. Buat domain model structs di output/internal/domain/.
-3. Buat migration files di output/migrations/.
-4. Update specs/data-models/schema.md.
-
-Perhatikan:
-- Semua relasi (foreign keys, many-to-many, composite keys)
-- Soft delete columns (gorm.DeletedAt / deleted_at)
-- Index & Unique constraints yang ada di schema asli.
+Instruksi Wajib Eksekusi:
+1. Baca `specs/modules/[nama-modul].md`, `tasks/.../task-[nomor]-[nama-modul].md`, dan `context/RULES.md`.
+2. Tulis kode target di `output/` lapis demi lapis:
+   - DTO structs di `output/internal/dto/` (gunakan pointer untuk field nullable, format JSON envelope)
+   - Domain model & interfaces di `output/internal/domain/`
+   - Repository di `output/internal/repository/` (WAJIB kueri DB riil — DILARANG KERAS menggunakan hardcoded mock/dummy data!)
+   - Service / UseCase di `output/internal/service/` (implementasikan seluruh logika percabangan sesuai Branching Matrix)
+   - Handler di `output/internal/handler/`
+   - Route registration di `output/internal/router/api.go`
+3. Pastikan kode mengikuti arsitektur di `specs/architecture.md` dan konvensi di `context/conventions.md`.
+4. Update status task di `tasks/_index.md` menjadi `[/]` saat mulai dan `[x]` setelah selesai dan teruji.
 ```
 
 ---
 
-### 🧪 6. Buatkan Tests & QA
+### 🛑 4B. Checkpoint 2: Audit Keselarasan Kode Target vs Spesifikasi
 
+```markdown
+Tolong lakukan audit verifikasi silang (Checkpoint 2: Code vs Spec Parity) untuk modul [NAMA_MODUL]:
+1. Periksa seluruh method repository di `output/internal/repository/`: Apakah ada data dummy hardcoded (`return 5000, nil` atau `[]map{}`) yang tersisa?
+2. Periksa apakah seluruh endpoint menangani mode query parameter (`?menu=...`, `?tab=...`) dan mengembalikan DTO yang sesuai?
+3. Periksa apakah field opsional mengembalikan `null` yang aman (bukan `0` atau `""`)?
+4. Jalankan unit test dan integration test di `output/tests/`.
+5. Tampilkan ringkasan hasil pengujian dan konfirmasi kelayakan modul.
 ```
-Tolong buatkan unit tests dan integration tests untuk modul [nama modul].
+
+---
+
+### 🗄️ 5. Konversi Database Schema & Migrasi
+
+```markdown
+Tolong konversi seluruh skema database dari `source/` ke teknologi target:
+
+1. Baca seluruh migration files / DDL schema di `source/database/migrations/` (atau setara).
+2. Buat target domain model structs di `output/internal/domain/`.
+3. Buat file migrasi target (Goose / GORM AutoMigrate / Prisma / Alembic) di `output/migrations/`.
+4. Update dokumentasi skema di `specs/data-models/schema.md`.
+
+Perhatikan dengan teliti:
+- Semua relasi tabel (Foreign Keys, composite keys, indexing)
+- Format tipe data presisi (DECIMAL/BIGINT untuk mata uang, TIMESTAMP with timezone)
+- Soft delete columns (`deleted_at` timestamp)
+- Initial seed data / constant lookup tables (roles, statuses)
+```
+
+---
+
+### 🧪 6. Pembuatan Unit & Integration Tests Lengkap
+
+```markdown
+Tolong buatkan unit test dan integration test komprehensif untuk modul [NAMA_MODUL].
 
 Referensi:
-- Spec: specs/modules/[modul].md (bagian Test Cases & Acceptance Criteria)
-- Implementation: output/internal/[handler|service|repository]/
+- Spec: `specs/modules/[nama-modul].md` (bagian Acceptance Criteria & Test Cases)
+- Implementasi: `output/internal/[handler|service|repository]/`
 
-Tulis test file di output/tests/[modul]_test.go.
-Pastikan mencakup pengujian:
-- Skenario request normal (Base Mode)
-- Skenario percabangan query params (?menu=..., dll.)
-- Skenario data relasi null (pointer null safety)
-- Skenario validasi input salah (400 Bad Request)
+Tuliskan test suite di `output/tests/[nama-modul]_test.go` (atau format target).
+Pastikan test suite menguji 100% skenario berikut:
+1. Happy Path — Base Mode (request valid tanpa query params)
+2. Branching Permutations — Semua mode query param (`?menu=mission`, `?menu=history`, dll.)
+3. Null Safety — Data relasi kosong di DB tetap menghasilkan JSON valid dengan nilai null
+4. Validation Errors — Field wajib tidak diisi menghasilkan HTTP 422 / 400 dengan envelope yang sesuai
+5. Concurrency Test — Uji race condition pada mutasi saldo/stok
 ```
 
 ---
 
-### 🔍 7. Review & Validasi Integritas Framework
+### 🔍 7. Validasi Integritas Framework & QA Final
 
-```
-Tolong jalankan validasi menyeluruh terhadap framework dan output code:
-1. Jalankan .\scripts\alih.ps1 validate (atau bash scripts/alih.sh validate).
-2. Periksa apakah ada logic rule di context/RULES.md yang terlewat.
-3. Periksa apakah semua DTO nullable sudah aman dari false zero-values.
-4. Tampilkan dashboard progress via .\scripts\alih.ps1 status.
-```
-
----
-
-### 📊 8. Cek Progress Konversi
-
-```
-Tolong cek progress konversi saat ini:
-1. Baca tasks/_index.md atau jalankan .\scripts\alih.ps1 status.
-2. Berapa persen modul yang sudah selesai?
-3. Apa task berikutnya yang paling direkomendasikan untuk dikerjakan?
+```markdown
+Semua modul telah selesai dikonversi. Tolong lakukan validasi kualitas menyeluruh:
+1. Jalankan validator integritas framework: `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`).
+2. Periksa seluruh checklist di `context/qa-checklist.md` (Spec coverage, code quality, 8 enterprise standards, feature parity).
+3. Jalankan seluruh test suite di `output/` dan pastikan 0 failure.
+4. Tampilkan dashboard progres akhir melalui `.\scripts\alih.ps1 status`.
+5. Sajikan laporan kesiapan perilisan (Release Readiness Report).
 ```
 
 ---
 
-### 🛠️ 9. Generate Custom Preset (Jika Preset Tidak Ada)
+## 🏆 ONE-SHOT MASTER PROMPT — Untuk Proyek Skala Kecil/Menengah
 
-```
-Saya mau konversi dari [SOURCE FRAMEWORK] ([SOURCE LANG]) ke [TARGET FRAMEWORK] ([TARGET LANG]).
-Preset untuk kombinasi ini belum ada.
+Jika Anda ingin AI mengeksekusi seluruh siklus secara mandiri namun tetap menerapkan standar mutu ketat:
 
-Tolong buat preset baru dengan membuat 3 file berikut:
-1. `.sdd/presets/[source]-to-[target]/patterns.md` (Mapping arsitektur, routing, ORM, auth, validasi)
-2. `.sdd/presets/[source]-to-[target]/conventions.md` (Naming rules, file layout, style guide)
-3. `.sdd/presets/[source]-to-[target]/glossary.md` (Kamus istilah & path mapping)
+```markdown
+Saya ingin mengonversi seluruh proyek dari folder `source/` ke `output/` menggunakan framework AlihSpec SDD.
 
-Gunakan format dari `.sdd/presets/_custom-template/` sebagai acuan.
-```
+Tolong lakukan konversi secara bertahap (Iteratif per modul) dengan mematuhi ATURAN DEEP CONTROLLER AST INSPECTION dan 8 CRITICAL QUALITY STANDARDS di `evaluate/evaluation-specs-mismatch.md`:
 
----
+LANGKAH 1 — ANALISIS & ARSITEKTUR:
+- Scan `source/` dan petakan seluruh modul, endpoint, query params, relasi DB, dan JWT claims.
+- Tuliskan ringkasan arsitektur ke `specs/overview.md` dan `specs/architecture.md`.
 
-### 🟣 10. Konversi Menggunakan Template Target (reference-target/)
+LANGKAH 2 — SETUP OUTPUT PROJECT:
+- Inisialisasi scaffold project target di `output/` sesuai `context/tech-stack.md` dan konvensi di `context/conventions.md`.
+- Buat database schema & migrations di `output/migrations/`.
 
-```
-Saya sudah meletakkan starter kit/boilerplate target di folder reference-target/.
-Saya ingin mengonversi source code dari source/ [Laravel/dll] ke output/ [Go/dll]
-dengan MENIRU struktur, arsitektur, dan helper utilities yang ada di reference-target/.
+LANGKAH 3 — ITERATIVE PER-MODULE CONVERSION (Ulangi untuk Setiap Modul):
+Untuk setiap modul bisnis:
+  a. Tulis spesifikasi lengkap di `specs/modules/[modul].md` dengan DoD Checklist, Branching Matrix, dan DTO Pointer types.
+  b. Eksekusi Checkpoint 1 (Validasi spec vs source controller line-by-line).
+  c. Buat task breakdown di `tasks/` dan update `tasks/_index.md`.
+  d. Tulis kode target di `output/` (DTO ➔ Domain ➔ Repository Real Queries ➔ Service Logic ➔ Handler ➔ Tests).
+  e. DILARANG KERAS menggunakan data dummy/fallback hardcoded pada repository!
+  f. Eksekusi Checkpoint 2 (Validasi zero dummy data & OpenAPI contract match).
+  g. Tandai task [x] di `tasks/_index.md`.
 
-Tolong:
-1. Scan folder reference-target/ dan ekstrak arsitektur ke specs/architecture.md serta conventions ke context/conventions.md.
-2. Setup output/ project mengikuti pola reference-target/.
-3. Mulai konversi modul dari source/ ke output/ sesuai spec dan pola tersebut.
+LANGKAH 4 — VALIDASI & RELEASE QA:
+- Jalankan `.\scripts\alih.ps1 validate` untuk memastikan integritas 100%.
+- Jalankan seluruh unit & integration test suite di `output/`.
+- Sajikan dashboard status akhir dari `.\scripts\alih.ps1 status`.
+
+Berikan laporan progres setiap kali menyelesaikan 1 modul. Berhenti dan tanyakan kepada saya jika menemukan ambiguitas logika bisnis yang tidak tercantum di kode sumber.
 ```
