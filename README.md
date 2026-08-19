@@ -1,4 +1,4 @@
-# ⚡ AlihSpec — Spec-Driven Project Conversion Framework
+﻿# ⚡ AlihSpec — Spec-Driven Project Conversion Framework
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square" alt="Version 1.0.0" />
@@ -139,3 +139,4 @@ Didistribusikan di bawah lisensi open-source **MIT License**. Lihat [`LICENSE`](
 <p align="center">
   <b>AlihSpec v1.0.0</b> • Dibuat untuk ekosistem AI Coding modern 🚀
 </p>
+
