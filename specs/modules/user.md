@@ -1,5 +1,13 @@
-# Module Spec: User
+﻿# Module Spec: User
 
+## 🎯 Spec Definition of Done (DoD) Checklist
+- [x] **Validation & Query Parity**: Pagination params (page, per_page, search) dan update validation tercatat.
+- [x] **Branching Logic Parity**: Percabangan role checking (Admin vs Self User) dan email unique validation dipetakan.
+- [x] **SQL & Table Join Parity**: Query relasi user roles tercatat.
+- [x] **Pointer Nullability Parity**: Field opsional seperti phone dan avatar_url bertipe pointer *string.
+- [x] **No Dummy Fallback**: Seluruh data bersumber dari query DB riil.
+
+---
 ## Overview
 Handles user profile management — view, update, and delete user accounts.
 CRUD operations for user data by authenticated users and admins.
@@ -176,3 +184,5 @@ type UserRepository interface {
 | PUT /users/:id dengan email duplikat | 409 |
 | DELETE /users/:id (admin) | 200 |
 | DELETE /users/:id (non-admin) | 403 |
+
+

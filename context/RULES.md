@@ -1,21 +1,37 @@
-# Business Rules Registry
+﻿# Business & Architectural Rules Registry
 
-> Satu tempat yang mengumpulkan **semua business rule** dari seluruh modul.
-> AI agent: Selalu cek file ini untuk memastikan tidak ada rule yang terlewat saat implementasi.
+> Satu tempat yang mengumpulkan **semua aturan arsitektur & business rules** dari seluruh modul.
+> AI agent: Selalu cek file ini untuk memastikan tidak ada aturan atau percabangan yang terlewat saat implementasi.
 
 ---
 
-## Format
+## 🏛️ Core Architectural Guardrails (Wajib Dipatuhi Semua Agent)
 
-```markdown
-### [RULE-XXX] Nama Rule
-**Modul**: [auth / user / product / dll]
-**Spec Ref**: [specs/modules/[module].md#section]
-**Status**: [ ] Not Implemented | [/] In Progress | [x] Implemented
-**File Target**: `output/internal/[layer]/[file].go`
+### [RULE-ARCH-01] Deep Controller AST Inspection (Bedah Baris-demi-Baris)
+**Modul**: Semua Modul (Fase 1 & 2)
+**Status**: [x] Mandatory Directives
+Agent **DILARANG** hanya membaca nama fungsi controller atau model secara sekilas. Agent **WAJIB** membedah seluruh baris logika controller sumber: semua query param (`menu`, `tab`, `filter`), semua percabangan kondisi `if/switch`, dan semua relasi/JOIN database sebelum membuat spesifikasi.
 
-Deskripsi rule dan bagaimana cara mengimplementasikannya.
-```
+### [RULE-ARCH-02] Strict No Dummy Fallback (Dilarang Hardcoded Dummy Data)
+**Modul**: Repository & Service Layer
+**Status**: [x] Mandatory Directives
+Agent **DILARANG KERAS** mengembalikan data dummy hardcoded (seperti `return 5000, nil` atau `[]map{}`) pada layer repository atau handler. Setiap method repository wajib mengeksekusi query database riil yang terhubung ke skema tabel.
+
+### [RULE-ARCH-03] Pointer Nullability Parity (Pointer pada Nullable Fields)
+**Modul**: DTO & Domain Layer
+**Status**: [x] Mandatory Directives
+Pada bahasa bertipe statis (Go / TypeScript), seluruh field JSON yang bersifat opsional atau nullable di database **WAJIB** menggunakan tipe pointer (`*int64`, `*string`, `*bool`). Hal ini mencegah nilai `nil/null` berubah secara salah menjadi nilai default (`0` atau `""`) pada output JSON.
+
+### [RULE-ARCH-04] Dual Validation Checkpoints
+**Modul**: Workflow Pipeline
+**Status**: [x] Mandatory Directives
+- **Checkpoint 1 (Spec vs Source)**: Validasi spesifikasi terhadap controller sumber sebelum membuat file task di `tasks/`.
+- **Checkpoint 2 (Task vs Spec)**: Validasi kriteria task terhadap spesifikasi sebelum menulis kode di `output/`.
+
+### [RULE-ARCH-05] Iterative Per-Module Execution
+**Modul**: Workflow Pipeline
+**Status**: [x] Mandatory Directives
+Dilarang memproses spesifikasi atau konversi kode secara massal (*bulk*) jika proyek memiliki > 10 endpoint. Eksekusi wajib dilakukan per modul secara bertahap (Spec ➔ Validate ➔ Task ➔ Code ➔ Test).
 
 ---
 

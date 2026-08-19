@@ -1,28 +1,26 @@
-# 🤖 Vibe Coding Guide — Konversi Project dengan AI
+﻿# ⚡ Vibe Coding Guide — Konversi Project dengan AI (AlihSpec SDD)
 
 > Untuk kamu yang ingin **zero manual work**.
 > Cukup copy-paste prompt ke AI agent dan review hasilnya.
 >
-> **Estimasi waktu setup**: 5 menit
-> **Cara kerja**: Kamu describe → AI eksekusi → Kamu review → Repeat
+> **Estimasi waktu setup**: 5 menit  
+> **Cara kerja**: Kamu Prompt ➔ AI Eksekusi ➔ Validasi Checkpoint ➔ Repeat
 
 ---
 
-## 📍 Gambaran Besar
+## 🧭 Gambaran Besar Alur Kerja
 
 ```
-FASE 0 ──► FASE 1 ──► FASE 2 ──► FASE 3 ──► FASE 4 ──► FASE 5
- Setup     Analisis    Specs      Tasks     Konversi    Validasi
- 5 menit   AI          AI         AI         AI         AI + Kamu
+FASE 0        FASE 1        FASE 2        FASE 3        FASE 4        FASE 5
+ Setup    ➔  Analisis  ➔   Specs    ➔    Tasks   ➔   Konversi  ➔   Validasi
+ 5 menit       AI       AI + Check 1      AI       AI + Check 2   AI + Kamu
 ```
-
-Kamu hanya **aktif** di Fase 0 (setup minimal) dan bagian review setiap fase.
 
 ---
 
 ## ⚡ FASE 0: Setup Awal (5 Menit, Manual)
 
-Ini satu-satunya bagian yang benar-benar manual. Hanya 3 langkah:
+Hanya 3 langkah mudah:
 
 ### Langkah 1 — Jalankan init script
 
@@ -36,8 +34,8 @@ bash scripts/alih.sh init
 
 Ikuti pertanyaan yang muncul:
 - Nama project
-- Source language & framework (misal: `php`, `laravel`)
-- Target language & framework (misal: `go`, `gin`)
+- Source language & framework (misal: `php`, `laravel` atau `php`, `codeigniter`)
+- Target language & framework (misal: `go`, `gin` atau `typescript`, `nestjs`)
 
 ### Langkah 2 — Tambahkan source project
 
@@ -45,20 +43,15 @@ Ikuti pertanyaan yang muncul:
 # Copy project lama ke folder source/
 xcopy /E /I C:\path\to\your\project source\
 
-# Atau git submodule
+# Atau gunakan git submodule
 git submodule add https://github.com/your/project.git source
 ```
 
-### Langkah 3 — Buka AI agent favoritmu
-
-Buka Antigravity / Kiro / Cursor / Claude / ChatGPT.
-Pastikan workspace sudah terbuka di folder `spec-drive-development/`.
-
-**Selesai setup. Sisanya AI yang handle.** 🚀
+*(Opsional: Jika kamu punya starter kit/boilerplate target yang ingin ditiru, salin ke `reference-target/`)*.
 
 ---
 
-## 🤖 FASE 1: Analisis Source Project
+## 🤖 FASE 1: Analisis Mendalam Source Project
 
 ### Kirim prompt ini ke AI:
 
@@ -67,242 +60,122 @@ Saya baru setup AlihSpec framework untuk konversi project.
 Source project ada di folder source/.
 
 Tolong lakukan hal berikut:
-1. Baca context/AGENTS.md untuk memahami aturan framework ini
-2. Baca .sdd/config.yaml untuk tau source/target tech stack
-3. Scan semua file di source/ dan buat laporan berisi:
-   - Daftar semua modul/fitur yang ada (misal: auth, user, product, dll)
-   - Daftar semua endpoint/route
-   - Daftar semua model/tabel database
-   - Daftar semua dependency utama (auth, payment, email, storage, dll)
-   - Bagian yang kompleks atau perlu perhatian khusus
-4. Perkirakan jumlah task yang dibutuhkan
+1. Baca context/AGENTS.md dan evaluate/evaluation-specs-mismatch.md untuk memahami aturan konversi dan pencegahan shallow specs.
+2. Baca .sdd/config.yaml untuk tau source/target tech stack.
+3. Scan seluruh source/ dan buat laporan berisi:
+   - Daftar semua modul/fitur (auth, user, product, order, dll)
+   - Daftar semua endpoint/route (HTTP method & controller action)
+   - Daftar semua model database dan relasi antar tabel
+   - Dependensi penting dari package manager (composer.json / package.json)
 
-Tampilkan hasil dalam format tabel yang rapi.
-Jangan tulis kode dulu, hanya analisis.
+Tulis ringkasannya ke specs/overview.md.
 ```
-
-### Yang perlu kamu review:
-- Apakah semua modul utama terdeteksi?
-- Apakah ada fitur yang mau di-drop (tidak perlu dikonversi)?
 
 ---
 
-## 📋 FASE 2: Generate Semua Specs
+## 📋 FASE 2: Tulis Spesifikasi Modul (Deep AST Inspection)
 
 ### Kirim prompt ini ke AI:
 
 ```
-Berdasarkan analisis source/ yang sudah kita lakukan, sekarang buat semua specs.
+Berdasarkan hasil analisis di specs/overview.md, buatkan spesifikasi lengkap untuk SETIAP modul di specs/modules/[nama].md.
 
-Lakukan secara berurutan:
+Gunakan template di specs/modules/_template.md dan ikuti ATURAN DEEP CONTROLLER AST INSPECTION:
+1. Bedah controller sumber baris-demi-baris:
+   - Catat SEMUA query parameter (?menu=..., ?tab=..., ?filter=..., ?limit=..., ?offset=...)
+   - Petakan SEMUA percabangan internal (if/switch) dan mode respon berbeda ke dalam Branching Matrix
+   - Catat SEMUA kueri SQL, Table Joins (LEFT JOIN / INNER JOIN), GROUP BY, dan agregasi kalkulasi
+2. Pastikan DTO Struct menggunakan tipe POINTER (*int64, *string, *bool) untuk field opsional/nullable.
+3. Lengkapi Spec Definition of Done (DoD) Checklist di bagian atas berkas.
+4. DILARANG membuat spesifikasi dangkal (shallow specs) yang menyederhanakan logika percabangan!
 
-STEP 1 — Update specs/overview.md:
-- Isi bagian Project (nama, source, target)
-- Isi Background (alasan konversi)
-- Isi Scope (in scope dan out of scope)
-- Isi Module Breakdown (tabel semua modul)
-- Isi Key Decisions (tech stack choices)
-
-STEP 2 — Buat specs/modules/[nama].md untuk setiap modul:
-- Gunakan specs/modules/_template.md sebagai template
-- Lihat specs/modules/auth.md sebagai contoh lengkap
-- Tulis spec untuk SETIAP modul yang ditemukan di source/
-- Sertakan: semua endpoint, business rules, DTOs, acceptance criteria
-
-STEP 3 — Update specs/data-models/schema.md:
-- Dokumentasikan semua tabel dari source/
-- Sertakan semua kolom, tipe data, relasi, dan index
-
-STEP 4 — Update specs/api-contracts/openapi.yaml:
-- Dokumentasikan semua endpoint dari source/
-- Ikuti format OpenAPI 3.1 yang sudah ada
-
-Beri update setelah selesai tiap STEP. Tanya jika ada business logic
-yang tidak jelas dari source code.
+Update juga specs/data-models/schema.md dan specs/api-contracts/openapi.yaml.
 ```
 
-### Yang perlu kamu review:
-- Apakah business rules sudah benar?
-- Apakah ada endpoint yang berbeda dari implementasi source?
-- Konfirmasi jika ada yang AI tanyakan
+### 🛑 CHECKPOINT 1: Verifikasi Keselarasan Spec vs Source
+Setelah AI selesai menulis spec, kirim prompt verifikasi ini:
+
+```
+Lakukan audit silang Checkpoint 1 (Spec vs Source Alignment):
+1. Bandingkan controller sumber di source/ dengan specs/modules/.
+2. Apakah ada query param, percabangan if/switch, atau join tabel di controller sumber yang belum tercatat di spec?
+3. Apakah semua field opsional sudah bertipe pointer di DTO?
+4. Berikan laporan konfirmasi bahwa spec 100% siap dibuatkan task breakdown.
+```
 
 ---
 
-## ✅ FASE 3: Generate Semua Tasks
+## 🗂️ FASE 3: Generate Task Breakdown
 
 ### Kirim prompt ini ke AI:
 
 ```
-Specs sudah selesai. Sekarang buat task breakdown lengkap.
+Specs sudah 100% diverifikasi. Sekarang buat task breakdown lengkap:
 
-Lakukan:
-
-1. Buat task files di tasks/ untuk setiap modul:
-   - Gunakan tasks/_template.md sebagai template
-   - Bagi menjadi fase yang logis:
-     * Phase 1: Foundation (setup project, DB layer, auth)
-     * Phase 2: Core Modules (semua modul utama)
-     * Phase 3: Integration (route wiring, tests, CI)
-   - Urut berdasarkan dependency (prerequisite dulu)
-   - Isi sub-tasks, source reference, dan acceptance criteria
-
-2. Update tasks/_index.md:
-   - Tambahkan semua task ke tabel progress
-   - Update counter (total tasks per phase)
-
-Setelah selesai, tampilkan tasks/_index.md yang sudah diupdate.
-```
-
-### Yang perlu kamu review:
-- Apakah urutan fase sudah masuk akal?
-- Apakah ada task yang hilang?
-
----
-
-## 🔨 FASE 4: Mulai Konversi
-
-Ada 3 sub-opsi tergantung kecepatan yang kamu inginkan:
-
-### Opsi A — AI Jalan Sampai Selesai (Paling Hands-off)
-
-```
-Kerjakan SEMUA task di tasks/_index.md secara berurutan sampai selesai.
-
-Untuk setiap task:
-1. Baca spec yang relevan di specs/modules/
-2. Baca context/AGENTS.md untuk aturan
-3. Lihat source/ untuk referensi logic
-4. Implementasi di output/ sesuai specs/architecture.md
-5. Ikuti konvensi di context/conventions.md
-6. Update task status di tasks/_index.md
-
-Beri laporan singkat setiap selesai 1 task.
-Tanya saya jika ada business logic yang ambigu.
-Stop dan tanya jika ada keputusan teknis penting.
-```
-
-### Opsi B — Satu Task per Sesi (Lebih Terkontrol)
-
-```
-Kerjakan 1 task berikutnya dari tasks/_index.md.
-Pilih task paling awal yang belum selesai dan tidak blocked.
-
-Setelah selesai, tampilkan:
-- File apa saja yang dibuat/diubah
-- Apakah ada keputusan teknis yang dibuat
-- Task mana yang akan dikerjakan berikutnya
-```
-
-### Opsi C — Satu Modul Spesifik
-
-```
-Tolong kerjakan modul [AUTH/USER/PRODUCT/nama modul].
-
-1. Baca specs/modules/[modul].md
-2. Lihat source/[path ke file relevan]
-3. Implementasi semua file yang dibutuhkan di output/
-4. Update task status di tasks/_index.md
-
-Setelah selesai, tunjukkan file apa saja yang dibuat.
+1. Buat task files di tasks/ untuk setiap modul menggunakan template tasks/_template.md:
+   - Phase 1: Foundation (setup project, DB layer, auth)
+   - Phase 2: Core Modules (semua modul bisnis utama)
+   - Phase 3: Integration & Testing (route wiring, tests, CI)
+2. Pecah sub-task secara berlapis: DTO ➔ Domain ➔ Repository (Real Queries) ➔ Service/UseCase ➔ Handler ➔ Tests.
+3. Update tasks/_index.md dengan daftar task yang sudah dibuat.
 ```
 
 ---
 
-## 🔍 FASE 5: Validasi & QA
+## 🚀 FASE 4: Eksekusi Konversi Modul (Strict No Dummy Data)
 
 ### Kirim prompt ini ke AI:
 
 ```
-Semua task sudah selesai. Lakukan validasi menyeluruh.
+Kerjakan task di tasks/_index.md secara bertahap dan teruji.
 
-Gunakan checklist di context/qa-checklist.md dan verifikasi:
-
-1. FEATURE PARITY — Cek semua endpoint dari openapi.yaml sudah ada di output/
-2. BUSINESS RULES — Cek semua rules dari specs/modules/ sudah diimplementasi
-3. CODE QUALITY — Cek semua file ikuti konvensi di context/conventions.md
-4. ARCHITECTURE — Cek semua file ada di path yang benar sesuai specs/architecture.md
-5. ERROR HANDLING — Cek semua endpoint punya proper error handling
-
-Buat laporan:
-- ✅ Yang sudah benar
-- ❌ Yang kurang atau salah
-- Langsung perbaiki semua yang kurang
+Aturan Wajib Eksekusi:
+1. Baca specs/modules/[modul].md dan tasks/.../task-[xxx].md.
+2. Tulis kode target di output/:
+   - DTO structs di output/internal/dto/ (wajib pointer untuk field nullable)
+   - Domain model & interfaces di output/internal/domain/
+   - Repository di output/internal/repository/ (WAJIB query GORM/SQL riil, DILARANG KERAS menggunakan data dummy/fallback hardcoded!)
+   - Service / UseCase di output/internal/service/ (tangani semua percabangan if/switch sesuai branching matrix)
+   - HTTP Handler di output/internal/handler/
+   - Route registration di output/internal/router/api.go
+3. Update task status di tasks/_index.md menjadi [x] setelah selesai dan teruji.
 ```
 
-### Setelah validasi selesai:
+### 🛑 CHECKPOINT 2: Verifikasi Keselarasan Task vs Output Code
+Setiap modul selesai, kirim prompt ini:
 
 ```
-Update dokumentasi:
-1. docs/progress.md — catat milestone "Konversi selesai"
-2. docs/changelog.md — catat semua modul yang sudah dikonversi
-3. tasks/_index.md — pastikan semua task sudah [x]
-
-Lalu tampilkan cara menjalankan project di output/.
+Lakukan audit Checkpoint 2 untuk modul yang baru dikerjakan:
+1. Apakah ada fungsi di Repository/Service yang mengembalikan data dummy/fallback hardcoded?
+2. Apakah semua endpoint mengembalikan JSON yang identik dengan kontrak OpenAPI?
+3. Jalankan unit test di output/tests/ untuk memastikan semua acceptance criteria lolos.
 ```
 
 ---
 
-## 💬 Prompt Situasional
+## 🔍 FASE 5: Validasi Akhir & QA
 
-### Jika AI salah / tidak sesuai spec:
-```
-Ini tidak sesuai dengan spec di specs/modules/[modul].md.
-Yang benar adalah: [jelaskan].
-Perbaiki dan pastikan tidak ada bagian lain yang sama kesalahannya.
-```
+### Jalankan CLI Validator:
+```powershell
+# Windows
+.\scripts\alih.ps1 validate
 
-### Jika AI bingung dengan source code:
-```
-File [nama file] di source/ susah dibaca karena [alasan].
-Yang ingin dikonversi adalah behavior ini: [jelaskan behavior yang diinginkan].
+# Linux / macOS
+bash scripts/alih.sh validate
 ```
 
-### Jika mau pause dan lanjut besok:
+### Kirim prompt QA akhir ke AI:
 ```
-Stop dulu. Simpan state dengan:
-1. Update tasks/_index.md — tandai task yang sedang dikerjakan sebagai [/]
-2. Tulis catatan di docs/progress.md tentang progress hari ini
+Semua task sudah selesai. Lakukan validasi menyeluruh:
+1. Jalankan semua unit test dan integration test di output/.
+2. Cek semua checklist di context/qa-checklist.md.
+3. Pastikan tidak ada link rusak atau rule di context/RULES.md yang terlewat.
 ```
-
-### Jika ada bug di output:
-```
-Ada bug: [deskripsi bug].
-File yang relevan: output/[path].
-Tolong debug dan fix. Cek juga apakah spec di specs/modules/ sudah jelas
-atau perlu diupdate.
-```
-
-### Cek progress kapan saja (CLI atau Prompt):
-- **Opsi Cepat (Terminal)**:
-  ```powershell
-  .\scripts\alih.ps1 status   # atau bash scripts/alih.sh status
-  ```
-- **Opsi Chat**:
-  ```
-  Berapa persen progress konversi saat ini?
-  Tampilkan tasks/_index.md dalam format yang mudah dibaca.
-  Rekomendasikan task berikutnya yang harus dikerjakan.
-  ```
-
-### Validasi integritas framework:
-- **Jalankan kapan saja**:
-  ```powershell
-  .\scripts\alih.ps1 validate   # atau bash scripts/alih.sh validate
-  ```
-  Memvalidasi tidak ada link rusak dan semua spec terdaftar di tasks.
 
 ---
 
-## ✅ Checklist Akhir (Kamu yang Cek)
+## 💡 Perintah Monitoring Cepat (Gunakan Kapan Saja)
 
-Sebelum menggunakan project hasil konversi:
-
-- [ ] Jalankan project: `cd output && [perintah run]`
-- [ ] Test endpoint utama (auth, health check)
-- [ ] Cek response format sesuai yang diharapkan client
-- [ ] Review sekilas 2-3 modul hasil konversi untuk sanity check
-
----
-
-> 💡 **Tips**: Untuk project besar, gunakan **Opsi B** (satu task per sesi)
-> agar kamu tetap punya kontrol dan bisa review setiap bagian sebelum lanjut.
+- **Cek Progress Dashboard**: `.\scripts\alih.ps1 status` (atau `bash scripts/alih.sh status`)
+- **Validasi Integritas**: `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`)
+- **Bantuan Perintah**: `.\scripts\alih.ps1 help`

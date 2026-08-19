@@ -1,5 +1,13 @@
-# Module Spec: Product
+﻿# Module Spec: Product
 
+## 🎯 Spec Definition of Done (DoD) Checklist
+- [x] **Validation & Query Parity**: Query params (category_id, search, min_price, max_price, page, per_page) tercatat.
+- [x] **Branching Logic Parity**: Percabangan filter multi-kategori dan stock availability dipetakan.
+- [x] **SQL & Table Join Parity**: Relasi tabel categories dan product_images tercatat.
+- [x] **Pointer Nullability Parity**: Field description dan discount_price bertipe pointer.
+- [x] **No Dummy Fallback**: Seluruh kueri katalog terhubung ke database.
+
+---
 > **📋 Example module** — Replace this with your actual product/resource module.
 > If your project doesn't have a "Product" module, rename this file accordingly.
 
@@ -172,3 +180,5 @@ type Product struct {
 | POST /products (non-admin) | 403 |
 | PUT /products/:id (admin) | 200 + updated |
 | DELETE /products/:id (admin) | 200 |
+
+

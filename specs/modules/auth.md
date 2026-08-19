@@ -1,4 +1,13 @@
-# Module Spec: Authentication (Auth)
+﻿# Module Spec: Authentication (Auth)
+
+## 🎯 Spec Definition of Done (DoD) Checklist
+- [x] **Validation & Query Parity**: Semua validasi (email, min password) dan query params tercatat.
+- [x] **Branching Logic Parity**: Percabangan login gagal, email duplicate, dan token revocation dipetakan.
+- [x] **SQL & Table Join Parity**: Query pencarian user by email tercatat.
+- [x] **Pointer Nullability Parity**: Field opsional pada DTO menggunakan tipe pointer.
+- [x] **No Dummy Fallback**: Menggunakan hashing bcrypt riil dan validasi token JWT riil.
+
+---
 
 ## Overview
 Handles user registration, login, logout, and token management.
@@ -194,3 +203,4 @@ type AuthService interface {
 | Access `/me` with valid token | 200 + user data |
 | Access `/me` without token | 401 |
 | Logout | 200 + token invalidated |
+

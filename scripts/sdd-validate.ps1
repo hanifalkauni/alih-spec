@@ -1,5 +1,5 @@
-# AlihSpec Framework Integrity Validator — Windows PowerShell
-# Memvalidasi kelengkapan spesifikasi, tugas, dan link internal
+﻿# AlihSpec Framework Integrity Validator — Windows PowerShell
+# Memvalidasi kelengkapan spesifikasi, tugas, DoD, dan link internal
 #
 # Usage:
 #   .\scripts\sdd-validate.ps1
@@ -72,19 +72,30 @@ if ($brokenCount -eq 0) {
     Write-Host "  [OK] All markdown links are valid! (0 broken links)" -ForegroundColor Green
 }
 
-# 3. Check Spec to Task Coverage
+# 3. Check Spec-to-Task Coverage & Definition of Done (DoD)
 Write-Host ""
-Write-Host "3. Checking Spec-to-Task Coverage..." -ForegroundColor Yellow
+Write-Host "3. Checking Spec-to-Task Coverage & Spec DoD..." -ForegroundColor Yellow
 $specs = Get-ChildItem -Path "specs\modules" -Filter *.md | Where-Object { $_.Name -ne "_template.md" }
 $taskIndexContent = Get-Content "tasks\_index.md" -Raw -Encoding utf8
 
 foreach ($s in $specs) {
     $moduleName = $s.BaseName
     $sName = $s.Name
+    $sContent = Get-Content $s.FullName -Raw -Encoding utf8
+
+    # Check Task Index mapping
     if ($taskIndexContent -match $moduleName) {
-        Write-Host "  [OK] Spec $sName has matching task entry in tasks/_index.md" -ForegroundColor Green
+        Write-Host "  [OK] Spec '$sName' has matching task entry in tasks/_index.md" -ForegroundColor Green
     } else {
-        Write-Host "  [WARNING] Spec $sName might not have a task in tasks/_index.md" -ForegroundColor Yellow
+        Write-Host "  [WARNING] Spec '$sName' might not have a task in tasks/_index.md" -ForegroundColor Yellow
+        $warnings++
+    }
+
+    # Check Spec DoD
+    if ($sContent -match "Definition of Done" -or $sContent -match "DoD") {
+        Write-Host "  [OK] Spec '$sName' includes Definition of Done (DoD) Checklist" -ForegroundColor Green
+    } else {
+        Write-Host "  [WARNING] Spec '$sName' is missing Definition of Done (DoD) Checklist" -ForegroundColor Yellow
         $warnings++
     }
 }

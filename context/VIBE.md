@@ -1,385 +1,191 @@
-# ⚡ Vibe Coding Guide — SDD Project Conversion
+﻿# ⚡ Bank Prompt Vibe Coding (AlihSpec SDD)
 
-> Untuk kamu yang mau **full vibe coding**: cukup copy-paste prompt di bawah ke AI agent
-> (Antigravity, Kiro, Cursor, Claude, ChatGPT, dll) dan biarkan AI yang bekerja.
->
-> Tidak perlu setup manual. Tidak perlu nulis kode sendiri. Cukup **describe, review, approve**.
+> Kumpulan prompt siap pakai untuk kamu yang ingin **Vibe Coding** — biarkan AI yang menangani proses konversi dari awal sampai akhir.
+> Cukup copy-paste prompt di bawah ke chat AI agent kamu (Antigravity, Cursor, Kiro, Copilot, Windsurf, dll).
 
 ---
 
-## 🧠 Cara Kerja Vibe Coding di Framework Ini
-
-```
-Kamu ngobrol  →  AI baca context/  →  AI baca specs/  →  AI tulis ke output/
-     ↑                                                           ↓
-  Review hasil  ←────────────────────────────────────────────────
-```
-
-**Tiga hal yang kamu lakukan:**
-1. **Describe** — ceritakan apa yang mau dikonversi
-2. **Review** — cek hasil AI sebentar
-3. **Approve** — bilang "lanjut" dan AI kerjakan berikutnya
+## 🎯 DAFTAR PROMPT BERDASARKAN FASE
 
 ---
 
-## 🚀 QUICK START — Copy Paste Ini Pertama Kali
-
-Ganti bagian dalam `[...]` lalu kirim ke AI agent kamu:
+### 🔍 1. Analisis Source Project (Fase 1)
 
 ```
-Saya punya project [Laravel/Django/Rails/Spring Boot] yang mau saya konversi ke [Go/NestJS/FastAPI/Node.js].
+Saya baru setup AlihSpec framework untuk konversi project.
+Source project ada di folder source/.
 
-Project saya ada di folder source/ di workspace ini.
-Framework SDD sudah disiapkan. Tolong:
+Tolong lakukan hal berikut secara mendalam:
+1. Baca context/AGENTS.md dan evaluate/evaluation-specs-mismatch.md untuk memahami aturan konversi dan pencegahan shallow specs.
+2. Baca .sdd/config.yaml untuk mengetahui source dan target tech stack.
+3. Scan seluruh folder source/ dan buatkan laporan komprehensif berisi:
+   - Daftar semua modul/fitur yang ada (auth, user, product, transaksi, dll)
+   - Daftar semua endpoint/route (beserta HTTP method dan controller action)
+   - Daftar semua model database dan relasi antar tabel
+   - Dependensi penting dari package manager (composer.json / package.json / requirements.txt)
 
-1. Baca context/AGENTS.md untuk memahami aturan konversi
-2. Baca .sdd/config.yaml untuk konfigurasi project
-3. Baca source/ dan buat daftar semua modul yang perlu dikonversi
-4. Update specs/overview.md dengan daftar modul tersebut
-5. Buatkan task untuk setiap modul di tasks/_index.md
-
-Setelah selesai, tunjukkan task list yang sudah dibuat.
+Tulis ringkasannya ke specs/overview.md.
 ```
 
 ---
 
-## 📋 PROMPT LIBRARY — Tinggal Copy Paste
-
-### 🔍 1. Analisis Source Project
+### 📋 2. Tulis Spesifikasi Modul (Deep AST Inspection — Fase 2)
 
 ```
-Tolong analisis project di folder source/ dan berikan:
-- Daftar semua controller/endpoint yang ada
-- Daftar semua model/tabel database
-- Daftar semua service dan logic bisnis utama
-- Dependensi penting (auth, payment, email, dll)
-- Estimasi jumlah task yang dibutuhkan untuk konversi
+Tolong buatkan spesifikasi detail untuk modul [AUTH/USER/PRODUCT/nama modul] di specs/modules/[nama-modul].md.
 
-Format hasilnya sebagai tabel yang rapi.
-```
+Gunakan template di specs/modules/_template.md dan ikuti aturan DEEP CONTROLLER AST INSPECTION:
+1. Bedah controller sumber baris-demi-baris:
+   - Catat SEMUA query parameter (?menu=..., ?tab=..., ?filter=..., ?limit=..., ?offset=...)
+   - Petakan SEMUA percabangan internal (if/switch) dan mode respon berbeda ke dalam Branching Matrix
+   - Catat SEMUA kueri SQL, Table Joins (LEFT JOIN / INNER JOIN), GROUP BY, dan agregasi kalkulasi
+2. Pastikan DTO Struct menggunakan tipe POINTER (*int64, *string, *bool) untuk field yang nullable/opsional.
+3. Lengkapi Spec Definition of Done (DoD) Checklist di bagian atas berkas.
+4. DILARANG membuat spesifikasi dangkal (shallow specs) yang menyederhanakan logika percabangan!
 
----
-
-### 📝 2. Buat Semua Spec Sekaligus
-
-```
-Berdasarkan analisis source/, tolong:
-1. Buat file spec untuk setiap modul di specs/modules/
-   (gunakan template dari specs/modules/_template.md)
-2. Update specs/overview.md dengan daftar semua modul
-3. Update specs/data-models/schema.md dengan semua tabel yang ada
-4. Update specs/api-contracts/openapi.yaml dengan semua endpoint
-
-Mulai dari modul yang paling fundamental dulu (auth, user).
+Tunjukkan draft spec setelah selesai untuk saya review.
 ```
 
 ---
 
-### ✅ 3. Buat Semua Task Sekaligus
+### 🛑 2B. Checkpoint 1: Verifikasi Keselarasan Spec vs Source
 
 ```
-Berdasarkan specs/ yang sudah ada, tolong:
-1. Buat task files untuk setiap modul di tasks/
-2. Urutkan berdasarkan dependency (foundation dulu)
-3. Bagi menjadi fase yang masuk akal
-4. Update tasks/_index.md dengan semua task
-
-Gunakan format dari tasks/_template.md.
+Tolong lakukan audit silang (Checkpoint 1: Spec vs Source Alignment) untuk modul [nama-modul]:
+1. Bandingkan controller sumber di source/ dengan specs/modules/[nama-modul].md.
+2. Periksa apakah ada query param, percabangan if/switch, atau join tabel di controller sumber yang belum tercatat di spec?
+3. Periksa apakah semua field opsional sudah bertipe pointer di DTO?
+4. Berikan checklist konfirmasi apakah spec sudah 100% lengkap dan siap dibuatkan task breakdown.
 ```
 
 ---
 
-### 🔨 4. Kerjakan Satu Task (yang paling umum dipakai)
+### 🗂️ 3. Buat Task Breakdown (Fase 3)
 
 ```
-Tolong kerjakan task berikutnya dari tasks/_index.md yang belum selesai.
-
-Langkahnya:
-1. Pilih task paling awal yang belum done dan tidak blocked
-2. Baca spec yang relevan di specs/modules/
-3. Lihat source code referensi di source/
-4. Tulis implementasi di output/ sesuai arsitektur di specs/architecture.md
-5. Ikuti konvensi di context/conventions.md
-6. Update status task di tasks/_index.md jadi [x]
-
-Tunjukkan file apa saja yang kamu tulis setelah selesai.
+Berdasarkan spesifikasi di specs/modules/[nama-modul].md yang sudah diverifikasi:
+1. Buat file task terperinci di tasks/phase-2-core-modules/task-[nomor]-[nama-modul].md menggunakan template tasks/_template.md.
+2. Pecah sub-task secara berlapis: DTO ➔ Domain Entity ➔ Repository (Real Queries) ➔ Service/UseCase ➔ Handler ➔ Tests.
+3. Daftarkan task baru tersebut ke dalam tasks/_index.md secara rapi.
 ```
 
 ---
 
-### 🔨 5. Kerjakan Satu Modul Spesifik
+### 🚀 4. Eksekusi Konversi Modul (Strict No Dummy Data — Fase 4)
 
 ```
-Tolong konversi modul [AUTH/USER/PRODUCT/nama modul] dari source/ ke output/.
+Tolong konversi modul [nama-modul] dari source/ ke output/ sesuai task dan spesifikasinya.
 
-Langkahnya:
-1. Baca specs/modules/[modul].md
-2. Lihat source/[path ke file relevan]
-3. Tulis semua file yang dibutuhkan di output/:
-   - Handler
-   - Service
-   - Repository
-   - DTO
-   - Domain model (jika belum ada)
-4. Ikuti arsitektur di specs/architecture.md
-5. Ikuti konvensi di context/conventions.md
-6. Update task status di tasks/_index.md
-
-Setelah selesai, review apakah ada yang perlu saya check?
+Aturan Wajib:
+1. Baca specs/modules/[nama-modul].md dan tasks/.../task-[nomor]-[nama-modul].md.
+2. Tulis kode target di output/:
+   - DTO structs di output/internal/dto/ (wajib pointer untuk field nullable)
+   - Domain model & interfaces di output/internal/domain/
+   - Repository di output/internal/repository/ (WAJIB query GORM/SQL riil, DILARANG KERAS menggunakan data dummy/fallback hardcoded!)
+   - Service / UseCase di output/internal/service/ (tangani semua percabangan if/switch sesuai branching matrix)
+   - HTTP Handler di output/internal/handler/
+   - Route registration di output/internal/router/api.go
+3. Update task status di tasks/_index.md menjadi [x] setelah selesai dan teruji.
 ```
 
 ---
 
-### 🔄 6. Kerjakan Semua Task Sampai Selesai
+### 🛑 4B. Checkpoint 2: Verifikasi Keselarasan Task vs Output Code
 
 ```
-Tolong kerjakan semua task di tasks/_index.md secara berurutan sampai selesai.
-
-Untuk setiap task:
-1. Baca spec yang relevan
-2. Cek source code referensi
-3. Tulis implementasi di output/
-4. Update status task
-5. Lanjut ke task berikutnya
-
-Beri update setiap selesai 1 task. Tanya saya jika ada ambiguitas
-pada business logic yang tidak jelas dari source code.
+Tolong lakukan audit silang (Checkpoint 2: Task vs Code Alignment) untuk modul [nama-modul]:
+1. Periksa apakah ada fungsi di Repository atau Service yang mengembalikan data dummy hardcoded?
+2. Periksa apakah semua endpoint mengembalikan struktur JSON yang identik dengan kontrak OpenAPI?
+3. Jalankan unit test / integrasi di output/.
 ```
 
 ---
 
-### 🗄️ 7. Konversi Database Schema
+### 🗄️ 5. Konversi Database Schema
 
 ```
 Tolong konversi semua database schema dari source/ ke target:
 
-1. Baca semua migration files di source/database/migrations/ (atau setara)
-2. Buat domain model structs di output/internal/domain/
-3. Buat migration files di output/migrations/
-4. Update specs/data-models/schema.md
+1. Baca semua migration files di source/database/migrations/ (atau setara).
+2. Buat domain model structs di output/internal/domain/.
+3. Buat migration files di output/migrations/.
+4. Update specs/data-models/schema.md.
 
 Perhatikan:
-- Semua relasi (foreign keys, many-to-many)
-- Soft delete columns
-- Index yang ada
+- Semua relasi (foreign keys, many-to-many, composite keys)
+- Soft delete columns (gorm.DeletedAt / deleted_at)
+- Index & Unique constraints yang ada di schema asli.
 ```
 
 ---
 
-### 🧪 8. Buatkan Tests
+### 🧪 6. Buatkan Tests & QA
 
 ```
 Tolong buatkan unit tests dan integration tests untuk modul [nama modul].
 
 Referensi:
-- Spec: specs/modules/[modul].md (bagian Test Cases)
+- Spec: specs/modules/[modul].md (bagian Test Cases & Acceptance Criteria)
 - Implementation: output/internal/[handler|service|repository]/
 
-Tulis test file di output/tests/[modul]_test.[ext].
-Cover semua acceptance criteria yang ada di spec.
+Tulis test file di output/tests/[modul]_test.go.
+Pastikan mencakup pengujian:
+- Skenario request normal (Base Mode)
+- Skenario percabangan query params (?menu=..., dll.)
+- Skenario data relasi null (pointer null safety)
+- Skenario validasi input salah (400 Bad Request)
 ```
 
 ---
 
-### 🔍 9. Review & Fix Hasil Konversi
+### 🔍 7. Review & Validasi Integritas Framework
 
 ```
-Tolong review output/ yang sudah ada dan cek:
-1. Apakah semua endpoint dari specs/api-contracts/openapi.yaml sudah diimplementasi?
-2. Apakah ada business rule di specs/modules/ yang belum diimplementasi?
-3. Apakah ada konvensi di context/conventions.md yang dilanggar?
-4. Apakah ada error handling yang kurang?
-
-Buatkan laporan dan langsung fix apa yang perlu diperbaiki.
+Tolong jalankan validasi menyeluruh terhadap framework dan output code:
+1. Jalankan .\scripts\alih.ps1 validate (atau bash scripts/alih.sh validate).
+2. Periksa apakah ada logic rule di context/RULES.md yang terlewat.
+3. Periksa apakah semua DTO nullable sudah aman dari false zero-values.
+4. Tampilkan dashboard progress via .\scripts\alih.ps1 status.
 ```
 
 ---
 
-### 📊 10. Cek Progress
+### 📊 8. Cek Progress Konversi
 
 ```
 Tolong cek progress konversi saat ini:
-1. Baca tasks/_index.md
-2. Hitung berapa persen yang sudah selesai
-3. Identifikasi task mana yang paling kritis untuk dikerjakan selanjutnya
-4. Apakah ada blocker?
-
-Tampilkan dalam format tabel yang mudah dibaca.
+1. Baca tasks/_index.md atau jalankan .\scripts\alih.ps1 status.
+2. Berapa persen modul yang sudah selesai?
+3. Apa task berikutnya yang paling direkomendasikan untuk dikerjakan?
 ```
 
 ---
 
-### 🚀 11. Setup Output Project
-
-```
-Tolong setup project [Go/NestJS/FastAPI/Node.js] di folder output/:
-
-1. Inisialisasi project baru dengan struktur sesuai specs/architecture.md
-2. Install semua dependensi yang ada di context/tech-stack.md
-3. Setup konfigurasi dasar (.env.example, config files)
-4. Buat endpoint /health yang return {"status": "ok"}
-5. Pastikan project bisa dijalankan
-
-Setelah selesai tunjukkan cara menjalankannya.
-```
-
----
-
-## 🎯 ONE-SHOT PROMPTS — Untuk Proyek Kecil
-
-Jika project kamu kecil (< 10 endpoint), gunakan prompt ini langsung:
-
-### One-Shot: Analisis + Spec + Task + Implementasi
-
-```
-Saya punya project [framework] di folder source/.
-Mau dikonversi ke [target framework].
-
-Tolong lakukan SEMUA langkah berikut secara berurutan:
-
-FASE 1 — ANALISIS:
-- Baca semua source code di source/
-- Identifikasi semua modul, endpoint, dan model
-
-FASE 2 — SPEC:
-- Tulis specs/overview.md
-- Buat specs/modules/[nama].md untuk setiap modul
-- Update specs/data-models/schema.md
-- Update specs/api-contracts/openapi.yaml
-
-FASE 3 — TASKS:
-- Buat task files di tasks/
-- Update tasks/_index.md
-
-FASE 4 — IMPLEMENTASI:
-- Setup output/ project
-- Implementasi semua modul sesuai spec
-- Mulai dari foundation, lalu core modules
-
-FASE 5 — REVIEW:
-- Verifikasi semua endpoint terimplementasi
-- Cek business logic sudah benar
-
-Update saya setiap selesai 1 fase. Tanya jika ada yang ambigu.
-```
-
----
-
-## 💬 Tips Ngobrol dengan AI
-
-### Saat AI tanya clarification:
-- **Business logic ambigu**: Jelaskan behavior yang diinginkan dalam bahasa natural
-- **Tech stack pilihan**: Jawab langsung, AI akan update tech-stack.md
-- **Naming convention**: Bilang "ikuti konvensi yang sudah ada" atau specify
-
-### Saat hasil tidak sesuai:
-```
-Ini tidak sesuai dengan [spec/konvensi/behavior yang diinginkan].
-Yang benar adalah: [jelaskan].
-Tolong perbaiki dan pastikan tidak ada bagian lain yang sama kesalahannya.
-```
-
-### Saat mau lanjut ke modul berikutnya:
-```
-Bagus! Lanjut ke task berikutnya.
-```
-
-### Saat mau pause dan lanjut nanti:
-```
-Stop dulu. Simpan progress di docs/progress.md dan
-catat di tasks/_index.md task mana yang sedang dikerjakan.
-```
-
-### 🆕 12. Generate Custom Preset (Jika Preset Tidak Ada)
-
-Jika preset untuk conversion pair kamu tidak tersedia:
+### 🛠️ 9. Generate Custom Preset (Jika Preset Tidak Ada)
 
 ```
 Saya mau konversi dari [SOURCE FRAMEWORK] ([SOURCE LANG]) ke [TARGET FRAMEWORK] ([TARGET LANG]).
 Preset untuk kombinasi ini belum ada.
 
 Tolong buat preset baru dengan membuat 3 file berikut:
+1. `.sdd/presets/[source]-to-[target]/patterns.md` (Mapping arsitektur, routing, ORM, auth, validasi)
+2. `.sdd/presets/[source]-to-[target]/conventions.md` (Naming rules, file layout, style guide)
+3. `.sdd/presets/[source]-to-[target]/glossary.md` (Kamus istilah & path mapping)
 
-1. `.sdd/presets/[source]-to-[target]/patterns.md`
-   Gunakan format dari `.sdd/presets/_custom-template/patterns.md` sebagai template.
-   Isi dengan mapping yang akurat dan idiomatic untuk kedua framework ini:
-   - Application layer mapping
-   - Routing
-   - ORM/Database
-   - Authentication
-   - Validation
-   - HTTP Response
-   - Testing
-   - DI/Configuration
-
-2. `.sdd/presets/[source]-to-[target]/conventions.md`
-   Gunakan format dari `.sdd/presets/_custom-template/conventions.md` sebagai template.
-   Isi dengan:
-   - Naming conventions target language
-   - File structure target project
-   - Code patterns dengan contoh kode nyata (source vs target side-by-side)
-
-3. `.sdd/presets/[source]-to-[target]/glossary.md`
-   Gunakan format dari `.sdd/presets/_custom-template/glossary.md` sebagai template.
-   Isi dengan:
-   - Terminology mapping (30+ istilah penting)
-   - File path mapping
-   - HTTP status code mapping untuk target framework
-
-Setelah selesai, juga update:
-- `context/conventions.md` — copy dari preset baru
-- `context/glossary.md` — copy dari preset baru
-- `.sdd/mapping/patterns.md` — copy dari preset baru
-- `.sdd/config.yaml` — update source/target language dan framework
-
-Gunakan konvensi yang benar-benar idiomatic untuk [TARGET LANG/FRAMEWORK],
-bukan sekadar terjemahan literal dari source.
+Gunakan format dari `.sdd/presets/_custom-template/` sebagai acuan.
 ```
 
 ---
 
-### 🎯 13. Konversi Menggunakan Template Target (reference-target/)
-
-Jika kamu sudah punya contoh starter kit / boilerplate project target di folder `reference-target/`:
+### 🟣 10. Konversi Menggunakan Template Target (reference-target/)
 
 ```
-Saya sudah meletakkan contoh starter kit/template target di folder reference-target/.
-Saya ingin mengkonversi source code dari source/ [Laravel/dll] ke output/ [Go/dll]
+Saya sudah meletakkan starter kit/boilerplate target di folder reference-target/.
+Saya ingin mengonversi source code dari source/ [Laravel/dll] ke output/ [Go/dll]
 dengan MENIRU struktur, arsitektur, dan helper utilities yang ada di reference-target/.
 
 Tolong:
-1. Scan folder reference-target/ dan ekstrak:
-   - Struktur arsitektur folder -> tulis ke specs/architecture.md
-   - Coding conventions, response format, error handling -> tulis ke context/conventions.md
-   - Tech stack & dependencies -> tulis ke context/tech-stack.md
-   - Pattern mapping -> tulis ke .sdd/mapping/patterns.md
-2. Setup output/ project mengikuti pola reference-target/
+1. Scan folder reference-target/ dan ekstrak arsitektur ke specs/architecture.md serta conventions ke context/conventions.md.
+2. Setup output/ project mengikuti pola reference-target/.
 3. Mulai konversi modul dari source/ ke output/ sesuai spec dan pola tersebut.
 ```
-
----
-
-## 🔧 Konfigurasi Cepat untuk Vibe Coding
-
-Sebelum mulai, update dua hal ini:
-
-**1. `.sdd/config.yaml`** — isi source/target:
-```yaml
-conversion:
-  source:
-    language: "php"      # ganti sesuai project kamu
-    framework: "laravel"
-  target:
-    language: "go"       # ganti sesuai target kamu
-    framework: "gin"
-```
-
-**2. `context/AGENTS.md`** — isi bagian ini:
-```markdown
-## What Is This Project?
-Converting: [nama project kamu]
-From: [source lang/framework]
-To: [target lang/framework]
-```
-
-Selesai. Sisanya biarkan AI yang handle. 🚀
