@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SDD Status Script — Linux/macOS Bash
+# AlihSpec Status Script — Linux/macOS/Git-Bash
 # Menampilkan dashboard progress konversi secara instan
 #
 # Usage:
@@ -27,8 +27,11 @@ declare -a PHASES
 declare -A PHASE_TOTAL
 declare -A PHASE_DONE
 
-while IFS= read -r line; do
-    if [[ $line =~ ^##\ Phase\ (.*) ]]; then
+PHASE_PATTERN='^##[[:space:]]+Phase[[:space:]]+(.*)'
+TASK_PATTERN='^[[:space:]]*-[[:space:]]*\[(.)\][[:space:]]+\[([^]]+)\]\(([^)]+)\)[[:space:]]*[-—]?[[:space:]]*(.*)'
+
+while IFS= read -r line || [ -n "$line" ]; do
+    if [[ "$line" =~ $PHASE_PATTERN ]]; then
         CURRENT_PHASE="${BASH_REMATCH[1]}"
         if [[ -z "${PHASE_TOTAL[$CURRENT_PHASE]}" ]]; then
             PHASES+=("$CURRENT_PHASE")
@@ -37,10 +40,10 @@ while IFS= read -r line; do
         fi
     fi
 
-    if [[ $line =~ ^[[:space:]]*-[[:space:]]*\[(.)\][[:space:]]*\[([^\]]+)\]\(([^)]+)\)[[:space:]]*(—|-)?(.*) ]]; then
+    if [[ "$line" =~ $TASK_PATTERN ]]; then
         STATUS="${BASH_REMATCH[1]}"
         FILE="${BASH_REMATCH[2]}"
-        DESC="${BASH_REMATCH[5]}"
+        DESC="${BASH_REMATCH[4]}"
 
         TOTAL=$((TOTAL + 1))
         PHASE_TOTAL["$CURRENT_PHASE"]=$(( ${PHASE_TOTAL["$CURRENT_PHASE"]} + 1 ))
@@ -77,7 +80,7 @@ for ((i=0; i<EMPTY; i++)); do BAR="${BAR}-"; done
 
 echo ""
 echo "==================================================="
-echo "   ⚡ AlihSpec — Conversion Progress Dashboard"
+echo "   AlihSpec - Conversion Progress Dashboard"
 echo "==================================================="
 echo ""
 echo "  Progress : [$BAR] ${PERCENT}%"
@@ -109,7 +112,7 @@ done
 
 if [ $NEXT_IDX -eq -1 ]; then
     for i in "${!TASKS_STATUS[@]}"; do
-        if [ "${TASKS_STATUS[$i]}" = " " ]; then
+        if [ "${TASKS_STATUS[$i]}" = " " ] || [ -z "${TASKS_STATUS[$i]}" ]; then
             NEXT_IDX=$i
             break
         fi
