@@ -154,5 +154,17 @@ flowchart TD
 
 When deep contextual guidance is needed, consult the following bundled reference files:
 - [16 Universal Pillars Reference](./references/16-pillars-cheatsheet.md)
+- [8 Critical Quality Standards](./references/8-quality-standards.md)
+- [Cross-Stack Pattern Mappings Catalog](./references/pattern-mappings-catalog.md)
 - [Deep Controller AST Inspection Guide](./references/ast-inspection-guide.md)
 - [Dual-Validation Checkpoints Protocol](./references/dual-checkpoints.md)
+
+---
+
+## 📋 Scaffolding Resource Templates
+
+Use the following ready-to-use template files when creating SDD artifacts in any project:
+- **Module Spec Template**: [`resources/templates/spec-module.md`](./resources/templates/spec-module.md) (with DoD Checklist & Branching Matrix)
+- **Atomic Task Template**: [`resources/templates/task.md`](./resources/templates/task.md) (with Technical Acceptance Criteria)
+- **QA Parity Checklist Template**: [`resources/templates/qa-checklist.md`](./resources/templates/qa-checklist.md) (Comprehensive post-conversion validation)
+
