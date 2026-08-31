@@ -4,25 +4,28 @@
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square" alt="Version 1.0.0" />
   <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License MIT" />
   <img src="https://img.shields.io/badge/methodology-Spec--Driven%20Development-purple.svg?style=flat-square" alt="SDD Methodology" />
+  <img src="https://img.shields.io/badge/pillars-16%20Universal%20Pillars-teal.svg?style=flat-square" alt="16 Pillars" />
   <img src="https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20macOS-orange.svg?style=flat-square" alt="Cross-Platform" />
-  <img src="https://img.shields.io/badge/AI%20IDEs-Antigravity%20|%20Cursor%20|%20Kiro%20|%20Copilot%20|%20Claude-purple.svg?style=flat-square" alt="AI IDE Support" />
+  <img src="https://img.shields.io/badge/AI%20IDEs-Antigravity%20|%20Cursor%20|%20Claude%20|%20Windsurf%20|%20Cline%20|%20Copilot-purple.svg?style=flat-square" alt="AI IDE Support" />
 </p>
 
-> **Alihkan codebase ke bahasa apa pun dengan spesifikasi hidup & zero logic drift.**  
-> *Shift any codebase across stacks through living specs, dual checkpoints, and AST-level precision.*
+> **Alihkan codebase ke bahasa apa pun dengan spesifikasi hidup, 16 pilar universal & zero logic drift.**  
+> *Shift any codebase across stacks through living specs, 16 universal conversion pillars, dual checkpoints, and AST-level precision.*
 >
-> Framework sistematis untuk mengonversi proyek perangkat lunak dari satu bahasa/framework ke bahasa/framework lain menggunakan metodologi **Spec-Driven Development (SDD)**, guardrails anti-shallow spec, dan AI-powered coding agents.
+> Framework sistematis untuk mengonversi proyek perangkat lunak dari satu bahasa/framework ke bahasa/framework lain menggunakan metodologi **Spec-Driven Development (SDD)**, 7 Golden Directives, dan AI Coding Agents berstandar enterprise. Berfungsi ganda sebagai **Workspace Template** terisolasi maupun **Portable AI Agent Skill**.
 
 ---
 
 ## 🌟 Mengapa Menggunakan AlihSpec?
 
 - ⚡ **~70% Lebih Cepat (~3x Lipat)**: Memangkas siklus *trial-and-error* dan mengeliminasi 75% waktu debugging pasca-generate ([Lihat Benchmark Efisiensi](./docs/efficiency-benchmark.md)).
-- 🛡️ **Zero Logic Drift & Anti-Shallow Specs**: Aturan bisnis, query parameters, percabangan `if/switch`, dan relasi database terkunci di `specs/` sebelum coding dimulai ([Baca Panduan Evaluasi & Studi Kasus](./evaluate/framework-evaluation.md)).
-- 🛑 **Dual Validation Checkpoints**: Verifikasi silang otomatis (Checkpoint 1: Spec vs Source, Checkpoint 2: Task vs Spec) sebelum kode ditulis.
+- 🛡️ **16 Pilar Pelajaran Universal Konversi**: Melindungi sistem dari risiko *drift* di 4 kuadran: Konfigurasi/Gateway, Kontrak/DTO, Database/ACID, hingga I/O/Observability ([Baca Panduan Master Evaluasi](./evaluate/framework-evaluation.md)).
+- 🔬 **Zero Logic Drift & Deep AST Inspection**: Aturan bisnis, query parameters, percabangan `if/switch`, dan relasi database dibedah baris-demi-baris dan terkunci di `specs/` sebelum coding dimulai.
+- 🛑 **Dual Validation Checkpoints**: Verifikasi silang otomatis (Checkpoint 1: Spec vs Source, Checkpoint 2: Task vs Spec) untuk menjamin kualitas sebelum kode target ditulis.
 - 🚫 **Strict No Dummy Fallback**: Menjamin 100% query database riil di layer Repository tanpa hardcoded mock/fake values.
-- 🤖 **Multi-IDE & AI Native**: Dilengkapi instruksi guardrails bawaan untuk **Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code**, dan lainnya.
-- 📦 **6 Presets Bawaan + Custom Engine**: Dukungan siap pakai untuk Laravel, Go, NestJS, FastAPI, Django, Rails, Spring Boot, dan custom stack.
+- 🧠 **Dual-Mode (Template & Portable AI Skill)**: Dapat digunakan sebagai workspace template baru atau disalin sebagai skill `.agents/` langsung ke repo proyek lama tanpa mengotori folder root (*Sandbox Capsule Strategy*).
+- 🤖 **Multi-Agent Native Steering**: Dilengkapi instruksi guardrails bawaan untuk **Antigravity, Cursor, Claude Code, Windsurf, Cline/Roo Code, Kiro, dan GitHub Copilot**.
+- 📦 **10 Presets Bawaan + Custom Engine**: Dukungan siap pakai untuk Laravel, Go, NestJS, FastAPI, Django, Rails, Spring Boot, CodeIgniter, Express, dan custom stack.
 - 🟣 **Starter Template Support**: Fleksibilitas menggunakan boilerplate target pilihan Anda via `reference-target/`.
 
 ---
