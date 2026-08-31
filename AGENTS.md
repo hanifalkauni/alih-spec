@@ -1,11 +1,11 @@
-﻿# ⚡ AlihSpec — SDD AI Agent Instructions
+# ⚡ AlihSpec — SDD AI Agent Instructions
 
 > 📌 **Primary Agent Instructions**: Read [`context/AGENTS.md`](./context/AGENTS.md)
 > All specifications, rules, task tracking, conventions, and anti-shallow spec directives are defined there.
 
 ## Project Quick Map
 - 📖 **Complete Agent Instructions**: [`context/AGENTS.md`](./context/AGENTS.md)
-- 🔬 **Anti-Shallow Spec & Evaluation Guide**: [`evaluate/evaluation-specs-mismatch.md`](./evaluate/evaluation-specs-mismatch.md)
+- 🔬 **Master Evaluation & Lessons (16 Pillars & Anti-Shallow Specs)**: [`evaluate/framework-evaluation.md`](./evaluate/framework-evaluation.md)
 - 📋 **Active Task Queue**: [`tasks/_index.md`](./tasks/_index.md)
 - 🏛️ **Target Architecture**: [`specs/architecture.md`](./specs/architecture.md)
 - 🎨 **Coding Conventions**: [`context/conventions.md`](./context/conventions.md)

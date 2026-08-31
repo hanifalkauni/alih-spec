@@ -1,4 +1,4 @@
-﻿# 🛡️ QA Checklist — Validasi Kualitas & Presisi Konversi
+# 🛡️ QA Checklist — Validasi Kualitas & Presisi Konversi
 
 > Gunakan checklist ini setelah selesai mengonversi setiap modul.
 > Pastikan semua item terpenuhi sebelum menandai task sebagai `[x] Done`.
@@ -26,11 +26,18 @@
 ### 3. 🎯 Pointer Nullability Parity
 - [ ] Field DTO yang opsional atau nullable di database menggunakan tipe **pointer** (`*int64`, `*string`, `*bool`) sehingga tidak memicu false zero-value (`0` atau `""`) di JSON.
 
-### 4. 🏛️ Code Architecture & Conventions
+### 4. 🏛️ Code Architecture, Resilience & Conventions
 - [ ] File berada di path yang benar sesuai `specs/architecture.md`.
 - [ ] Naming convention mengikuti `context/conventions.md`.
 - [ ] Tidak ada business logic di handler layer (hanya di service/usecase).
 - [ ] Tidak ada akses DB langsung di handler (hanya melalui repository interface).
+- [ ] **Transaction Propagation**: Mutasi multi-tabel dalam satu proses bisnis berjalan dalam satu transaksi DB (`tx`).
+- [ ] **Explicit Table Binding**: Seluruh domain entity mendeklarasikan `TableName()` eksplisit (anti-implicit pluralization).
+- [ ] **Idempotency Protection**: Mutasi finansial/non-idempotent dilindungi oleh `X-Idempotency-Key` / Redis lock.
+- [ ] **Async & Shutdown Safety**: Background jobs terhubung ke Graceful Shutdown listener (`SIGTERM`/`SIGINT`).
+- [ ] **HTTP Client Timeout**: Outbound HTTP client memiliki timeout eksplisit (anti-hang).
+- [ ] **Safe File Streaming**: Upload file menggunakan streaming IO langsung ke storage (anti-RAM OOM).
+- [ ] **Structured Logging & Tracing**: Menggunakan structured JSON log dengan propagasi `X-Request-ID`.
 - [ ] Error handling proper (tidak ada error yang diabaikan/swallowed).
 - [ ] Context propagation benar (`ctx context.Context` sebagai argumen pertama).
 

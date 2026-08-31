@@ -1,4 +1,4 @@
-﻿# ⚡ AlihSpec — Master AI Agent Instructions
+# ⚡ AlihSpec — Master AI Agent Instructions
 
 > 📌 **This is the primary context file for AI agents.**
 > Read this file COMPLETELY before doing anything else in this project.
@@ -6,7 +6,7 @@
 > ⚡ **Vibe Coder?** Jika kamu user yang ingin full vibe coding,
 > baca [`context/VIBE.md`](./VIBE.md) untuk prompt siap pakai.
 >
-> 🔬 **Audit Case Study**: Baca [`evaluate/evaluation-specs-mismatch.md`](../evaluate/evaluation-specs-mismatch.md) untuk panduan mencegah *Shallow Specs* dan *Logic Drift*.
+> 🔬 **Master Evaluation & Lessons Guide**: Baca [`evaluate/framework-evaluation.md`](../evaluate/framework-evaluation.md) untuk panduan 16 Pilar Universal, 7 Golden Directives, dan pencegahan *Shallow Specs*.
 
 ---
 
@@ -34,7 +34,7 @@ tasks/            ➔ Your work queue. Pick a task, implement it, mark it done.
 context/          ➔ Rules, conventions, glossary, tech stack. Read before coding.
 output/           ➔ Where you write all new code (clean slate).
 docs/             ➔ Progress logs, decisions, changelog, benchmark.
-evaluate/         ➔ Deep inspection guide & anti-shallow spec case studies.
+evaluate/         ➔ Deep inspection guide, 16 universal pillars, & anti-shallow spec case studies.
 ```
 
 ---

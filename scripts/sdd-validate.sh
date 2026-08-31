@@ -27,6 +27,8 @@ CORE_FILES=(
     "context/tech-stack.md"
     "context/RULES.md"
     "context/qa-checklist.md"
+    "evaluate/README.md"
+    "evaluate/framework-evaluation.md"
     "specs/overview.md"
     "specs/architecture.md"
     "specs/data-models/schema.md"

@@ -18,7 +18,7 @@
 ## 🌟 Mengapa Menggunakan AlihSpec?
 
 - ⚡ **~70% Lebih Cepat (~3x Lipat)**: Memangkas siklus *trial-and-error* dan mengeliminasi 75% waktu debugging pasca-generate ([Lihat Benchmark Efisiensi](./docs/efficiency-benchmark.md)).
-- 🛡️ **Zero Logic Drift & Anti-Shallow Specs**: Aturan bisnis, query parameters, percabangan `if/switch`, dan relasi database terkunci di `specs/` sebelum coding dimulai ([Baca Studi Kasus Evaluasi](./evaluate/evaluation-specs-mismatch.md)).
+- 🛡️ **Zero Logic Drift & Anti-Shallow Specs**: Aturan bisnis, query parameters, percabangan `if/switch`, dan relasi database terkunci di `specs/` sebelum coding dimulai ([Baca Panduan Evaluasi & Studi Kasus](./evaluate/framework-evaluation.md)).
 - 🛑 **Dual Validation Checkpoints**: Verifikasi silang otomatis (Checkpoint 1: Spec vs Source, Checkpoint 2: Task vs Spec) sebelum kode ditulis.
 - 🚫 **Strict No Dummy Fallback**: Menjamin 100% query database riil di layer Repository tanpa hardcoded mock/fake values.
 - 🤖 **Multi-IDE & AI Native**: Dilengkapi instruksi guardrails bawaan untuk **Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code**, dan lainnya.
@@ -66,6 +66,17 @@ AlihSpec menerapkan 8 standar presisi enterprise untuk mencegah bug laten di pro
 6. 🗑️ **Soft Delete Leakage Prevention**: Query manual JOIN atau Raw SQL wajib menyertakan `AND [table].deleted_at IS NULL`.
 7. 🔑 **JWT Claims Key Parity**: Key payload token JWT (`sub`, `uid`, `user_id`, `role`) wajib konsisten dengan sistem autentikasi sumber.
 8. 🛡️ **Empty State Contract**: Koleksi list kosong wajib mengembalikan array kosong `[]` (bukan `null`), dan entitas tunggal tidak ditemukan mengembalikan HTTP 404 / `null`.
+
+---
+
+## 📚 Landasan Teori & Standar Industri yang Dirujuk
+
+Seluruh 7 Direktif, 16 Pilar Universal, dan 8 Standar Mutu di AlihSpec diturunkan dari standar internasional dan literatur rekayasa perangkat lunak terkemuka ([Baca Rujukan Lengkap di `evaluate/framework-evaluation.md`](./evaluate/framework-evaluation.md)):
+- 🏛️ **Pola Arsitektur**: *Clean Architecture* (Robert C. Martin), *Patterns of Enterprise Application Architecture & Strangler Fig Pattern* (Martin Fowler).
+- 🌐 **Protokol Web & API**: *IETF RFC 7519* (JWT Claims), *RFC 3339 / ISO 8601* (DateTime/Timezone), *RFC 7807 & 9110* (HTTP Status & Error Payloads), *RFC 3986* (URI Syntax).
+- 🗄️ **Integritas Database**: *ISO/IEC 9075 SQL Standard*, *ACID Transaction Model & Pessimistic Row-Level Locking (`SELECT ... FOR UPDATE`)*.
+- ⚙️ **Metodologi Modern**: *The Twelve-Factor App Methodology* (Strict Config Parity & Graceful Shutdown), *The Go Programming Language Specification*, dan *IEEE / ISO/IEC 25010 Software Quality Model*.
+- 🔬 **Studi Kasus Empiris**: Post-mortem audit konversi sistem monolitik enterprise (Laravel Eloquent ➔ Go Fiber Clean Architecture).
 
 ---
 
@@ -118,8 +129,9 @@ alih-spec/
 │   ├── qa-checklist.md   # Checklist audit mutu sebelum rilis
 │   └── glossary.md       # Kamus istilah & padanan konsep lintas bahasa
 │
-├── evaluate/             # 🔬 Panduan Evaluasi & Pencegahan Logic Drift
-│   └── evaluation-specs-mismatch.md # Studi kasus audit & panduan anti-shallow spec
+├── evaluate/             # 🔬 Pusat Evaluasi & Pelajaran Konversi Lintas Bahasa
+│   ├── README.md                    # Panduan tata kelola evaluasi & case studies
+│   └── framework-evaluation.md      # Master context: 16 pilar universal & guardrails
 │
 ├── output/               # 🟢 Hasil konversi murni (seluruh kode target ditulis di sini)
 ├── docs/                 # 📚 Audit trail, Architecture Decisions (ADR) & Benchmark
@@ -202,9 +214,9 @@ Framework ini dilengkapi CLI bawaan di folder `scripts/`:
 
 ## 🧠 Instruksi untuk AI Agent
 
-Jika Anda adalah AI Coding Assistant (**Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code**) yang membaca workspace ini:
+Jika Anda adalah AI Coding Assistant (**Antigravity, Cursor, Kiro, Copilot, Windsurf, Claude Code, Cline**) yang membaca workspace ini:
 1. 👉 **Wajib membaca [`context/AGENTS.md`](./context/AGENTS.md)** terlebih dahulu sebelum menulis atau mengubah kode apa pun.
-2. 🔬 **Baca [`evaluate/evaluation-specs-mismatch.md`](./evaluate/evaluation-specs-mismatch.md)** untuk memahami guardrails anti-shallow spec & dual validation checkpoints.
+2. 🔬 **Pahami 16 Pilar Universal & 7 Direktif di [`evaluate/framework-evaluation.md`](./evaluate/framework-evaluation.md)** untuk memastikan paritas arsitektural dan mencegah *shallow specs*.
 3. 📜 **Cek [`context/RULES.md`](./context/RULES.md)** untuk memastikan tidak ada aturan bisnis atau batasan arsitektur yang terlewat.
 
 ---
@@ -214,7 +226,8 @@ Jika Anda adalah AI Coding Assistant (**Antigravity, Cursor, Kiro, Copilot, Wind
 | Berkas | Kapan Harus Diakses? | Fungsi Utama |
 |---|---|---|
 | [`docs/START-HERE.md`](./docs/START-HERE.md) | Orientasi awal | Panduan memilih jalur kerja (Vibe vs Manual vs Hybrid) |
-| [`evaluate/evaluation-specs-mismatch.md`](./evaluate/evaluation-specs-mismatch.md) | Audit & Evaluasi | Panduan anti-shallow spec, studi kasus nyata, & 8 standar mutu |
+| [`evaluate/framework-evaluation.md`](./evaluate/framework-evaluation.md) | Evaluasi Lintas Bahasa | Master Guide: 16 Pilar Universal, 7 Direktif, Studi Kasus, & 8 Standar Mutu |
+| [`evaluate/README.md`](./evaluate/README.md) | Tata Kelola Evaluasi | Panduan struktur dan penambahan studi kasus evaluasi baru |
 | [`docs/prompt-queue/`](./docs/prompt-queue/README.md) | Eksekusi Vibe Coding | Antrean prompt terpisah per modul (nama modul & controller terisi otomatis) |
 | [`context/VIBE.md`](./context/VIBE.md) | Bank Prompt Vibe | Bank 13 prompt presisi berstandar enterprise siap pakai |
 | [`context/RULES.md`](./context/RULES.md) | Validasi Bisnis | Single registry seluruh aturan bisnis & guardrails arsitektur |

@@ -1,0 +1,15 @@
+# Cline & Roo Code Rules — AlihSpec SDD Framework
+
+## Context & Single Source of Truth
+- Primary Instructions: `context/AGENTS.md`
+- Master Evaluation Guide: `evaluate/framework-evaluation.md` (16 Universal Pillars & 7 Directives)
+- Business Rules Registry: `context/RULES.md`
+- Quality & Verification: `context/qa-checklist.md`
+
+## Autonomous Execution Directives
+1. **READ-ONLY Directories**: Never modify `source/` or `reference-target/`.
+2. **WRITE Directory**: All implementation files must be created strictly under `output/`.
+3. **Deep Source AST Inspection**: Inspect source controller code line-by-line before writing specifications or code.
+4. **No Dummy Code**: Repository layer must use real SQL/ORM queries with proper joins and transaction locks.
+5. **Pointer Types**: Use pointer types (`*int64`, `*string`, `*bool`) on optional fields in Go/TypeScript DTOs and models.
+6. **Task Lifecycle**: Check `tasks/_index.md`, update task markdown status, and ensure all acceptance criteria pass.

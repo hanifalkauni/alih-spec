@@ -1,4 +1,4 @@
-﻿# AlihSpec Framework Integrity Validator — Windows PowerShell
+# AlihSpec Framework Integrity Validator — Windows PowerShell
 # Memvalidasi kelengkapan spesifikasi, tugas, DoD, dan link internal
 #
 # Usage:
@@ -26,6 +26,8 @@ $coreFiles = @(
     "context\tech-stack.md",
     "context\RULES.md",
     "context\qa-checklist.md",
+    "evaluate\README.md",
+    "evaluate\framework-evaluation.md",
     "specs\overview.md",
     "specs\architecture.md",
     "specs\data-models\schema.md",

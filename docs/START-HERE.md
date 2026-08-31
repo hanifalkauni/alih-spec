@@ -53,6 +53,8 @@ pause di setiap fase untuk review sebelum lanjut.
 | Inisialisasi awal | `.\scripts\alih.ps1 init` (atau `bash scripts/alih.sh init`) |
 | Cek progress & task aktif | `.\scripts\alih.ps1 status` (atau `bash scripts/alih.sh status`) |
 | Validasi integritas & link | `.\scripts\alih.ps1 validate` (atau `bash scripts/alih.sh validate`) |
+| Master Evaluasi & 16 Pilar Universal | [`evaluate/framework-evaluation.md`](../evaluate/framework-evaluation.md) |
+| Tata Kelola Evaluasi & Case Studies | [`evaluate/README.md`](../evaluate/README.md) |
 | Preset tidak tersedia | [`.sdd/presets/CUSTOM-PRESET-GUIDE.md`](../.sdd/presets/CUSTOM-PRESET-GUIDE.md) |
 | Benchmark & KPI Efisiensi | [`docs/efficiency-benchmark.md`](./efficiency-benchmark.md) |
 | Antrean prompt per modul | [`docs/prompt-queue/`](./prompt-queue/README.md) |

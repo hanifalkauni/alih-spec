@@ -1,0 +1,13 @@
+# Windsurf Rules — AlihSpec Project Conversion Framework
+
+## Primary Context
+- Always read `context/AGENTS.md` before performing any task.
+- Read `evaluate/framework-evaluation.md` for Master Evaluation Guide (16 Universal Pillars & 7 Golden Directives).
+
+## Critical Rules & Guardrails
+1. **Never modify `source/` or `reference-target/`**: Both are read-only references.
+2. **Write all output code to `output/`**: Never place target code in root or source folders.
+3. **Strict No Dummy Fallback**: Never return fake mock data (`return 5000, nil` or `[]map{}`) in repository/handler layers; write real DB queries.
+4. **Pointer Nullability Parity**: Use pointer types (`*int64`, `*string`, `*bool`) for optional/nullable JSON fields.
+5. **Follow Target Architecture**: Clean Architecture defined in `specs/architecture.md` (Handler -> Service -> Repository -> Domain).
+6. **Task Tracking**: Read `tasks/_index.md`, mark `[/]` when starting, and mark `[x]` when completed after passing `context/qa-checklist.md`.

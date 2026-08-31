@@ -62,7 +62,7 @@ Saya baru menginisialisasi framework AlihSpec untuk mengonversi proyek ini.
 Source code proyek sumber berada di folder `source/`.
 
 Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
-1. Baca berkas `context/AGENTS.md` dan `evaluate/evaluation-specs-mismatch.md` untuk memahami standar mutu dan aturan pencegahan spesifikasi dangkal (shallow specs).
+1. Baca berkas `context/AGENTS.md` dan `evaluate/framework-evaluation.md` untuk memahami standar mutu dan aturan pencegahan spesifikasi dangkal (shallow specs).
 2. Baca `.sdd/config.yaml` dan `context/tech-stack.md` untuk memahami bahasa dan framework target.
 3. Bedah seluruh folder `source/` dan buatkan laporan komprehensif yang mencakup:
    - Daftar seluruh modul bisnis (Auth, User, Product, Wallet/Coin, Order, dll.)
@@ -73,10 +73,16 @@ Tolong lakukan analisis mendalam terhadap seluruh codebase di `source/`:
 4. Tuliskan hasil analisis terstruktur ini ke dalam berkas `specs/overview.md`.
 5. Buatkan antrean prompt siap pakai di dalam folder `docs/prompt-queue/`:
    - Buatkan file prompt terpisah untuk SETIAP modul yang ditemukan (misal: `docs/prompt-queue/01-auth.md`, `02-user.md`, dst.).
-   - Isi otomatis placeholder nama modul, path controller sumber, dan path task-nya (pre-filled).
-   - Sediakan opsi Single-Module Full Cycle prompt dan opsi Step-by-Step prompt di setiap file modul.
+   - Isi otomatis placeholder nama modul, path controller sumber, model sumber, spec target, task target, dan path handler target (pre-filled).
+   - 🚨 **STANDAR MUTU ANTI-DEGRADASI PROMPT**:
+     * Setiap file WAJIB menyediakan: **Opsi B (Full Cycle 1-Shot)** dan **Opsi A (5 Step-by-Step Prompts)**.
+     * **DILARANG MERINGKAS/MENYINGKAT instruksi Opsi A**: Setiap langkah (Step 1 s/d Step 5) wajib menguraikan detail instruksi: *Deep AST Inspection, query parameter spesifik modul, Join tabel, Row-level locking (jika ada mutasi koin/saldo), 8 Standar Mutu, Spec DoD, dan Zero Dummy Fallback*.
    - Daftarkan seluruh modul ke dalam `docs/prompt-queue/README.md`.
 ```
+
+> 💡 **TIPS PENYELAMAT (Jika Modul Sangat Banyak > 8 Modul)**:  
+> Jika AI memotong sebagian detail berkas prompt-queue karena limit panjang output token, cukup kirim prompt audit perbaikan ringkas:  
+> *"Tolong audit seluruh berkas di `docs/prompt-queue/`. Jika ada langkah Opsi A yang disingkat/terpotong, tulis ulang berkas tersebut agar memiliki detail instruksi lengkap 100% seperti berkas 01 & 02."*
 
 ---
 

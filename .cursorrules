@@ -1,41 +1,54 @@
 # Cursor Rules — AlihSpec Project Conversion Framework
 
 # This file is automatically read by Cursor AI.
-# It tells Cursor how to behave in this project.
+# It enforces strict Spec-Driven Development guardrails for project conversion.
 
 # ─────────────────────────────────────────────
-# PRIMARY CONTEXT
+# PRIMARY CONTEXT & SINGLE SOURCE OF TRUTH
 # ─────────────────────────────────────────────
-# Always read context/AGENTS.md first before doing anything.
-# It contains the full project context, workflow, and rules.
+# 1. ALWAYS read context/AGENTS.md first before doing anything.
+# 2. ALWAYS inspect evaluate/framework-evaluation.md for 16 Universal Conversion Pillars & 7 Directives.
 
-## Project Type
-This is an AlihSpec (Spec-Driven Development) project for converting code from one
-language/framework to another.
+## Project Structure
+- Source Code (READ-ONLY): source/
+- Target Template (READ-ONLY, OPTIONAL): reference-target/
+- Living Specifications: specs/ (modules/, architecture.md, overview.md)
+- Work Queue & Progress: tasks/_index.md
+- Context & Business Rules: context/ (AGENTS.md, RULES.md, conventions.md, qa-checklist.md)
+- Target Implementation: output/
+- Cross-Stack Lessons & Audit: evaluate/ (framework-evaluation.md)
 
-## Source of Truth
-- Specs are in: specs/modules/*.md
-- Task list is in: tasks/_index.md
-- Conventions are in: context/conventions.md
-- Pattern mapping is in: .sdd/mapping/patterns.md
-- Optional target template is in: reference-target/
+## 🚨 7 Mandatory Golden Directives
+1. Deep Controller AST Inspection: Bedah baris-demi-baris seluruh query parameter, percabangan if/switch, relasi join, dan validasi di controller sumber.
+2. Iterative Per-Module Execution: Dilarang memproses spesifikasi massal (bulk) jika > 10 endpoint. Alur: Spec ➔ Checkpoint 1 ➔ Task ➔ Checkpoint 2 ➔ Code ➔ QA.
+3. Pointer Nullability Parity: Gunakan tipe pointer (*int64, *string, *bool) untuk field opsional/nullable agar tidak menghasilkan zero-value palsu (0 / "") di JSON.
+4. Strict No Dummy Fallback: Dilarang keras mengembalikan hardcoded dummy data (return 5000, nil atau []map{}) di Repository/Handler layer.
+5. Spec Definition of Done (DoD): Setiap specs/modules/[module].md wajib lolos checklist DoD sebelum task dibuat.
+6. Checkpoint 1 (Spec vs Source): Validasi spesifikasi terhadap controller sumber sebelum breakdown task.
+7. Checkpoint 2 (Task vs Spec): Validasi kriteria task terhadap spesifikasi sebelum menulis kode di output/.
 
-## Critical Rules
-1. NEVER modify files in source/ or reference-target/ — both are read-only references
-2. ALWAYS write new code to output/ only
-3. ALWAYS read the relevant spec in specs/modules/ before implementing
-4. ALWAYS follow the architecture in specs/architecture.md
-5. ALWAYS follow conventions in context/conventions.md
-6. UPDATE task status in tasks/_index.md when starting or finishing a task
+## 🛡️ 16 Universal Conversion Pillars
+1. Zero Environment Key Drift: Key .env 100% identik dengan sumber.
+2. URL Builder Resiliency: Hindari double-slash (//) saat memanggil URL service.
+3. Universal Context Claims: Ekstraksi multi-key JWT/session context (tenant_id, business_id, user_id).
+4. Route Prefix Dual-Mounting: Dukung route /api/v1/... dan /v1/... serentak.
+5. Domain Valuation & Localization: Implementasikan helper multiplier dan format currency di domain layer.
+6. Smart Query Normalization: Defaulting parameter sebelum validasi DTO.
+7. Pointer Nullability Parity: Pointer pada struct field nullable.
+8. Flexible Payload Coercion: Tangani form-urlencoded / stringed-numbers.
+9. Strict Zero Dummy Fallback: 100% query database riil.
+10. Explicit DB Transaction Propagation: Oper tx context ke seluruh repo calls dalam satu usecase.
+11. ORM Explicit Table & Column Binding: Deklarasi TableName() eksplisit (anti-implicit pluralization).
+12. Idempotency & Safe Mutation: Perlindungan X-Idempotency-Key / Redis lock pada mutasi finansial.
+13. Async & Graceful Shutdown Safety: Anti-job drop saat container restart (SIGTERM/SIGINT).
+14. HTTP Client Timeout Parity: Timeout outbound HTTP eksplisit anti-hang.
+15. Safe File Upload Streaming: Streaming I/O io.Copy anti-RAM OOM.
+16. Structured Observability: Structured JSON logging & X-Request-ID tracing context.
 
-## Workflow
-When asked to implement a feature:
-1. Read specs/modules/[module].md
-2. Read .sdd/mapping/patterns.md for concept mapping
-3. Check tasks/_index.md for the relevant task and mark it [/]
-4. Look at source/ for reference
-5. Write implementation to output/
-6. Mark task [x] in tasks/_index.md
-
-## Full Context
-Read context/AGENTS.md for complete instructions.
+## Implementation Workflow
+1. Read specs/modules/[module].md & context/RULES.md.
+2. Read .sdd/mapping/patterns.md & context/conventions.md.
+3. Inspect source/ controller line-by-line.
+4. Mark task [/] in tasks/_index.md.
+5. Write code strictly in output/ following Clean Architecture (internal/handler ➔ internal/service ➔ internal/repository ➔ internal/domain).
+6. Verify against context/qa-checklist.md and mark task [x] in tasks/_index.md.

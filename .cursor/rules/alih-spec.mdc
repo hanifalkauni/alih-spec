@@ -1,0 +1,18 @@
+---
+description: AlihSpec SDD conversion framework master rules
+globs: **/*
+alwaysApply: true
+---
+
+# AlihSpec Master Rules for Cursor
+
+> Primary instructions are in `context/AGENTS.md`.
+> Always read `evaluate/framework-evaluation.md` for the Master Evaluation Guide (16 Universal Conversion Pillars & 7 Golden Directives).
+
+## Critical Rules
+1. `source/` and `reference-target/` are strictly **READ-ONLY**.
+2. All new implementation files must be written strictly to `output/`.
+3. Follow Clean Architecture in `specs/architecture.md` (Handler -> Service -> Repository -> Domain).
+4. No dummy fallback in Repository layer (write real queries).
+5. Use pointer types (`*int64`, `*string`, `*bool`) for optional/nullable fields.
+6. Verify against `context/qa-checklist.md` before marking tasks done in `tasks/_index.md`.

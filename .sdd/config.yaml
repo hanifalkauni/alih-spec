@@ -45,6 +45,9 @@ ai:
     - kiro
     - cursor
     - copilot
+    - claude
+    - windsurf
+    - cline
 
 # ─────────────────────────────────────────────
 # MAPPING RULES

@@ -1,4 +1,4 @@
-﻿# Business & Architectural Rules Registry
+# Business & Architectural Rules Registry
 
 > Satu tempat yang mengumpulkan **semua aturan arsitektur & business rules** dari seluruh modul.
 > AI agent: Selalu cek file ini untuk memastikan tidak ada aturan atau percabangan yang terlewat saat implementasi.
@@ -32,6 +32,46 @@ Pada bahasa bertipe statis (Go / TypeScript), seluruh field JSON yang bersifat o
 **Modul**: Workflow Pipeline
 **Status**: [x] Mandatory Directives
 Dilarang memproses spesifikasi atau konversi kode secara massal (*bulk*) jika proyek memiliki > 10 endpoint. Eksekusi wajib dilakukan per modul secara bertahap (Spec ➔ Validate ➔ Task ➔ Code ➔ Test).
+
+### [RULE-ARCH-06] Explicit DB Transaction Context Propagation
+**Modul**: Service & Repository Layer
+**Status**: [x] Mandatory Directives
+Seluruh mutasi multi-tabel dalam satu usecase wajib berada di dalam satu transaksi terisolasi (*atomic rollback on error*). Repository methods wajib mendukung propagasi context transaksi (`tx *gorm.DB` / `ctx`).
+
+### [RULE-ARCH-07] ORM Explicit Table & Column Binding Parity
+**Modul**: Domain Models / Entities
+**Status**: [x] Mandatory Directives
+Dilarang mengandalkan penamaan tabel implisit (*implicit pluralization*). Seluruh struct domain/model target wajib mendeklarasikan method `TableName()` atau anotasi skema secara eksplisit sesuai nama tabel asli di database sumber.
+
+### [RULE-ARCH-08] Async Worker & Graceful Shutdown Safety
+**Modul**: Background Worker & Event Handlers
+**Status**: [x] Mandatory Directives
+Pekerjaan asinkron (queue/event/mail) dilarang menggunakan *fire-and-forget goroutines* liar tanpa kontrol. Wajib menggunakan worker pool atau context listener yang terhubung ke sinyal Graceful Shutdown (`SIGTERM`/`SIGINT`).
+
+### [RULE-ARCH-09] External HTTP Client Timeout & Resiliency
+**Modul**: Gateway, Third-Party Client & Integration
+**Status**: [x] Mandatory Directives
+Dilarang menggunakan HTTP Client tanpa batas timeout (`http.DefaultClient`). Setiap pemanggilan HTTP ke service eksternal wajib mengonfigurasikan Connection Timeout dan Request Timeout eksplisit (misal 5-10 detik) untuk mencegah resource leak dan server freeze.
+
+### [RULE-ARCH-10] Flexible Payload Coercion & Content-Type Parity
+**Modul**: HTTP Handler & DTO Binding
+**Status**: [x] Mandatory Directives
+Pada endpoint yang menerima form-urlencoded atau payload dari frontend lama, DTO wajib mendukung type coercion fleksibel (string-to-number/boolean) agar tidak memicu error parsing 400 Bad Request.
+
+### [RULE-ARCH-11] Idempotency & Safe Mutation for Financial Actions
+**Modul**: Transaksi Finansial, Checkout, Topup
+**Status**: [x] Mandatory Directives
+Seluruh endpoint mutasi finansial/non-idempotent wajib memeriksa header `X-Idempotency-Key` atau mekanisme deduplikasi request via Redis/DB Unique constraint untuk mencegah *double charge*.
+
+### [RULE-ARCH-12] Safe File Upload Streaming & Storage Driver Parity
+**Modul**: Media & File Upload Handlers
+**Status**: [x] Mandatory Directives
+Dilarang memuat file upload utuh ke RAM (`ioutil.ReadAll`). Wajib menggunakan streaming IO (`io.Copy` langsung ke storage/S3), membatasi Max Multipart Memory, dan memvalidasi MIME type via Magic Bytes.
+
+### [RULE-ARCH-13] Structured Observability & Request-ID Tracing
+**Modul**: Logging & Middleware
+**Status**: [x] Mandatory Directives
+Wajib menggunakan Structured JSON Logging (Zap/Zerolog/Pino) dan mempropagasi `X-Request-ID` serta `context.Context` di setiap layer (Handler ➔ Service ➔ Repository) untuk audit tracing di produksi.
 
 ---
 

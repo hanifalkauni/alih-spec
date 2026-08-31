@@ -464,7 +464,7 @@ tasks/_index.md    ← Pastikan semua task [x]
 | File | Kapan Dibuka |
 |------|-------------|
 | [`context/AGENTS.md`](../context/AGENTS.md) | Setup awal, instruksi AI master |
-| [`evaluate/evaluation-specs-mismatch.md`](../evaluate/evaluation-specs-mismatch.md) | Panduan audit anti-shallow spec |
+| [`evaluate/framework-evaluation.md`](../evaluate/framework-evaluation.md) | Master panduan evaluasi & 16 pilar konversi |
 | [`context/checklist-before-start.md`](../context/checklist-before-start.md) | Verifikasi sebelum mulai |
 | [`context/RULES.md`](../context/RULES.md) | Cek aturan bisnis & kualitas |
 | [`.sdd/mapping/patterns.md`](../.sdd/mapping/patterns.md) | Referensi saat konversi |

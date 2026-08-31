@@ -1,16 +1,18 @@
 steering:
   - path: context/AGENTS.md
     description: "Primary AI agent instructions for this AlihSpec conversion project"
+  - path: evaluate/framework-evaluation.md
+    description: "Master Evaluation Guide: 16 Universal Conversion Pillars & 7 Golden Directives"
   - path: specs/architecture.md
     description: "Target project architecture — all output code must follow this"
+  - path: context/RULES.md
+    description: "Business and architectural rules registry"
   - path: context/conventions.md
     description: "Coding conventions for the target project"
   - path: .sdd/mapping/patterns.md
     description: "Design pattern mapping from source to target language"
-  - path: context/glossary.md
-    description: "Terminology mapping from source to target language"
-  - path: reference-target/README.md
-    description: "Optional reference target project template"
+  - path: context/qa-checklist.md
+    description: "QA checklist to verify module conversion parity"
   - path: tasks/_index.md
     description: "Current task list and progress dashboard"
 
@@ -26,15 +28,20 @@ rules:
     message: "Write implementation code to output/, not anywhere else."
 
   - id: spec-first
-    description: "Always read the spec before implementing"
-    message: "Before implementing a module, read specs/modules/[module].md first."
+    description: "Always read the spec and inspect source AST before implementing"
+    message: "Before implementing a module, inspect source controller line-by-line and read specs/modules/[module].md first."
+
+  - id: no-dummy-code
+    description: "Strictly prohibit hardcoded dummy returns in repository/service layers"
+    message: "Write real database queries with proper joins, aggregations, and row locks."
 
 workflows:
   - name: "Convert Module"
     steps:
-      - "Read specs/modules/[module].md"
-      - "Read .sdd/mapping/patterns.md for concept mapping"
+      - "Deep inspect source/[relevant controller] line-by-line"
+      - "Read specs/modules/[module].md & verify against context/RULES.md"
+      - "Check .sdd/mapping/patterns.md for concept mapping"
       - "Find task in tasks/_index.md, mark [/] in progress"
-      - "Reference source/[relevant file] for logic"
-      - "Implement in output/ following specs/architecture.md"
-      - "Mark task [x] done in tasks/_index.md"
+      - "Implement in output/ following Clean Architecture (Handler -> Service -> Repository -> Domain)"
+      - "Validate against context/qa-checklist.md and mark task [x] done in tasks/_index.md"
+
