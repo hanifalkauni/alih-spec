@@ -153,34 +153,63 @@ alih-spec/
 
 ---
 
-## ⚡ Quickstart (3 Langkah Memulai)
+## 🚀 Dua Cara Menggunakan AlihSpec
 
-### 1. Clone Template & Salin Proyek Sumber ke `source/`
-```bash
-git clone https://github.com/hanifalkauni/alih-spec.git my-conversion
-cd my-conversion
+AlihSpec dirancang fleksibel dengan **2 mode penggunaan**:
+
+```mermaid
+flowchart LR
+    A["AlihSpec"] --> B["Mode A: Dedicated Workspace Template\n(Clone Repo AlihSpec)"]
+    A --> C["Mode B: Portable AI Agent Skill\n(Copy .agents/ ke Proyek Mana Pun)"]
+    B --> D["Input di source/ ➔ Output di output/"]
+    C --> E["Kapsul Terisolasi di alih-conversion/"]
 ```
-Salin source code proyek lama ke dalam folder `source/`.  
-*(Opsional: jika Anda memiliki starter template target, letakkan di `reference-target/`)*.
 
-### 2. Jalankan Inisialisasi Proyek
-```powershell
-# Windows PowerShell
-.\scripts\alih.ps1 init
+---
 
-# Linux / macOS Bash
-bash scripts/alih.sh init
-```
-*Script akan memandu konfigurasi bahasa asal, bahasa target, dan otomatis memasang preset mapping yang sesuai.*
+### 1️⃣ Mode A: Dedicated Workspace Template (Alur Standar)
+> Cocok jika Anda ingin workspace migrasi yang bersih dan terisolasi secara menyeluruh sejak awal.
 
-### 3. Pilih Jalur Alur Kerja
-Buka **[`docs/START-HERE.md`](./docs/START-HERE.md)** untuk memilih alur konversi:
+1. **Clone Template**:
+   ```bash
+   git clone https://github.com/hanifalkauni/alih-spec.git my-conversion
+   cd my-conversion
+   ```
+2. **Salin Kode Sumber**: Salin kode proyek lama Anda ke dalam folder `source/` *(opsional: starter target di `reference-target/`)*.
+3. **Inisialisasi**: Jalankan `.\scripts\alih.ps1 init` (atau `bash scripts/alih.sh init`).
+4. **Pilih Jalur Kerja**:
+   - 🤖 **[Vibe Coding Guide](./docs/guide-vibe-coding.md)**: Gunakan prompt queue otomatis.
+   - ✍️ **[Manual Guide](./docs/guide-manual.md)**: Kontrol arsitektur & spec writing terperinci.
+   - ⚡ **[Prompt Bank (VIBE.md)](./context/VIBE.md)**: Bank 13 prompt enterprise siap pakai.
 
-| Panduan | Untuk Siapa | Link |
-|---|---|---|
-| 🤖 **Vibe Coding Guide** | Ingin AI menangani siklus konversi via prompt siap pakai | [`docs/guide-vibe-coding.md`](./docs/guide-vibe-coding.md) |
-| ✍️ **Manual Guide** | Ingin kontrol penuh, audit trail terperinci & manual spec writing | [`docs/guide-manual.md`](./docs/guide-manual.md) |
-| ⚡ **Prompt Bank (VIBE)** | Bank 13 prompt presisi tinggi siap copy-paste ke AI chat | [`context/VIBE.md`](./context/VIBE.md) |
+---
+
+### 2️⃣ Mode B: Portable AI Agent Skill (`.agents/skills/alih-spec/`)
+> Cocok jika Anda ingin **langsung mengonversi di dalam repository proyek lama** tanpa perlu memindahkan source code atau meng-clone seluruh template!
+
+1. **Pasang Skill**: Cukup salin folder [`.agents/`](./.agents/skills/alih-spec/SKILL.md) ke dalam root folder proyek lama Anda (atau pasang di global config AI IDE Anda `~/.gemini/config/skills/`).
+2. **Buka Proyek di AI IDE** (Antigravity IDE, Cursor, Claude Code, Windsurf, dll.).
+3. **Kirimkan Prompt Konversi ke AI Chat**:
+   ```markdown
+   Tolong konversikan modul auth dan order dari proyek ini ke Go Fiber Clean Architecture menggunakan skill alih-spec.
+   ```
+4. 🛡️ **Sandbox Capsule Strategy (Zero Root Pollution)**:
+   - AI otomatis membaca kode lama Anda secara **STRICT READ-ONLY**.
+   - AI **TIDAK AKAN MENGOTORI** root folder Anda. Seluruh spesifikasi, task, dan output kode target akan dibungkus rapi di dalam satu folder sandbox terisolasi:
+     ```text
+     my-laravel-app/            # 🔵 Proyek Asli Anda (Aman & Tidak Tersentuh)
+     ├── app/
+     ├── routes/
+     ├── database/
+     ├── .agents/skills/alih-spec/
+     │
+     └── alih-conversion/       # 📦 Folder Kapsul Terisolasi
+         ├── specs/             # Living specs & API contracts
+         ├── tasks/             # Antrean task & progress (_index.md)
+         ├── output/            # 🟢 Kode target Clean Architecture
+         └── docs/              # Catatan ADR & mapping log
+     ```
+   - *Nama Cadangan Fallback*: Jika `alih-conversion/` sudah ada di repo Anda, AI otomatis menggunakan nama alternatif: `.alih-spec/`, `_conversion/`, atau `conversion-[target]/`.
 
 ---
 
