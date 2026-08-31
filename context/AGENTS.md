@@ -35,6 +35,7 @@ context/          ➔ Rules, conventions, glossary, tech stack. Read before codi
 output/           ➔ Where you write all new code (clean slate).
 docs/             ➔ Progress logs, decisions, changelog, benchmark.
 evaluate/         ➔ Deep inspection guide, 16 universal pillars, & anti-shallow spec case studies.
+.agents/skills/   ➔ Native AI agent skill definition & procedural references.
 ```
 
 ---

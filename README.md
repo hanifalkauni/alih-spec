@@ -99,6 +99,10 @@ Seluruh 7 Direktif, 16 Pilar Universal, dan 8 Standar Mutu di AlihSpec diturunka
 ```
 alih-spec/
 │
+├── .agents/              # 🧠 Native AI Agent Skills & Customization
+│   └── skills/
+│       └── alih-spec/    # Skill AlihSpec bawaan (SKILL.md, 16 pillars, AST guide)
+│
 ├── .sdd/                 # ⚙️ Konfigurasi framework, active mapping & presets
 │   ├── config.yaml       # File konfigurasi utama proyek konversi
 │   ├── mapping/          # Aturan pemetaan pola (patterns.md, conventions.md)
