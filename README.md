@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square" alt="Version 1.0.0" />
-  <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License MIT" />
+  <img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg?style=flat-square" alt="License Apache 2.0" />
   <img src="https://img.shields.io/badge/methodology-Spec--Driven%20Development-purple.svg?style=flat-square" alt="SDD Methodology" />
   <img src="https://img.shields.io/badge/pillars-16%20Universal%20Pillars-teal.svg?style=flat-square" alt="16 Pillars" />
   <img src="https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20macOS-orange.svg?style=flat-square" alt="Cross-Platform" />
@@ -279,7 +279,7 @@ Jika Anda adalah AI Coding Assistant (**Antigravity, Cursor, Kiro, Copilot, Wind
 
 ## 📄 Lisensi
 
-Didistribusikan di bawah lisensi open-source **MIT License**. Lihat [`LICENSE`](./LICENSE) untuk informasi lebih lanjut.
+Didistribusikan di bawah lisensi open-source **Apache License 2.0**. Lihat [`LICENSE`](./LICENSE) untuk informasi lebih lanjut.
 
 ---
 
